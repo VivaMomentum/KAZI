@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kazi — Trusted Local Services & Job Accountability | Abuja, Nigeria</title>
+  <meta name="description" content="Find and hire reliable electricians, plumbers, mechanics, tailors, cleaners and barbers in Abuja. Agree on price and date, track jobs, and write verified reviews.">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Google Fonts for modern, crisp typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ================= TOP HEADER / NAVIGATION ================= -->
+  <header class="app-header" id="app-header">
+    <div class="header-container">
+      <div class="header-brand-block">
+        <a href="#home" class="brand-logo" data-screen="home">
+          <span class="logo-mark">⚡</span>
+          <span class="logo-text">Kazi</span>
+        </a>
+        <div class="header-city-pill" title="Currently serving Abuja, Nigeria">
+          <span class="city-dot"></span>
+          <span class="city-name" id="current-city-label">Abuja</span>
+        </div>
+      </div>
+
+      <!-- Desktop Nav Links -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <a href="#home" class="nav-link active" data-screen="home">Home</a>
+        <a href="#directory" class="nav-link" data-screen="directory">Find Artisans</a>
+        <a href="#my-jobs" class="nav-link" id="nav-link-my-jobs" data-screen="my-jobs">
+          My Jobs <span class="nav-badge" id="nav-active-jobs-badge">1</span>
+        </a>
+        <a href="#provider-dashboard" class="nav-link provider-only-link" id="nav-link-provider-dash" data-screen="provider-dashboard" style="display: none;">
+          Artisan Dashboard
+        </a>
+        <a href="#settings" class="nav-link" data-screen="settings">Settings</a>
+      </nav>
+
+      <!-- Role Switcher & User Meta -->
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-sm role-toggle-btn" id="nav-role-switcher-btn" title="Toggle between Customer and Artisan view for demo">
+          Switch to Artisan Mode
+        </button>
+        <button class="mobile-menu-btn" id="mobile-hamburger-btn" aria-label="Open menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <nav class="mobile-nav-links">
+      <a href="#home" class="mobile-nav-link" data-screen="home">🏠 Home</a>
+      <a href="#directory" class="mobile-nav-link" data-screen="directory">🔍 Find Artisans in Abuja</a>
+      <a href="#my-jobs" class="mobile-nav-link" data-screen="my-jobs">📋 My Jobs History</a>
+      <a href="#settings" class="mobile-nav-link" data-screen="settings">⚙️ Settings & Backup</a>
+    </nav>
+  </div>
+
+  <!-- ================= MAIN APPLICATION SCREENS ================= -->
+  <main id="main-content">
+
+    <!-- 1. HOME SCREEN -->
+    <section class="screen-section screen-active" id="screen-home">
+      <!-- Hero Banner -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-icon">🛡️</span>
+            <span>Accountability-First Services Platform · Abuja</span>
+          </div>
+          <h1 class="hero-title">Find reliable people. Agree on the job. Track what happens.</h1>
+          <p class="hero-subtitle">
+            Say goodbye to endless <em>"I'm coming"</em> delays and surprise price hikes. Kazi locks in the agreed price, tracks job milestones, and records verified customer reviews.
+          </p>
+
+          <!-- Quick Search Bar -->
+          <div class="hero-search-box">
+            <div class="search-input-group">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="hero-search-input" class="search-field" placeholder="Search electricians, plumbers, inverter repair...">
+            </div>
+            <div class="search-dropdown-group">
+              <select id="hero-category-select" class="search-select">
+                <option value="all">All Service Categories</option>
+                <option value="Electrician">Electrician</option>
+                <option value="Plumber">Plumber</option>
+                <option value="Mechanic">Mechanic</option>
+                <option value="Tailor">Tailor</option>
+                <option value="Cleaner">Cleaner</option>
+                <option value="Barber">Barber</option>
+                <option value="AC Technician">AC Technician</option>
+                <option value="Painter">Painter</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-search" onclick="KaziApp.filterByCategoryAndNavigate(document.getElementById('hero-category-select').value === 'all' ? '' : document.getElementById('hero-category-select').value)">
+              Find in Abuja
+            </button>
+          </div>
+
+          <div class="hero-trust-metrics">
+            <div class="trust-metric-item">
+              <strong>24+</strong>
+              <span>Verified Artisans</span>
+            </div>
+            <div class="trust-metric-item">
+              <strong>100%</strong>
+              <span>Fixed Agreed Price Records</span>
+            </div>
+            <div class="trust-metric-item">
+              <strong>Abuja</strong>
+              <span>Wuse II, Maitama, Garki & more</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Categories Quick Grid -->
+      <section class="home-section container">
+        <div class="section-title-wrap">
+          <div>
+            <h2 class="section-heading">Browse by Service Category</h2>
+            <p class="section-subheading">Select a trade to view vetted providers and typical pricing in Abuja</p>
+          </div>
+          <a href="#directory" class="link-more" onclick="KaziApp.showDirectory()">View all providers →</a>
+        </div>
+        <div class="categories-grid" id="categories-grid">
+          <!-- Populated by js/app.js -->
+        </div>
+      </section>
+
+      <!-- Why Kazi / The 4 Trust Pillars -->
+      <section class="pillars-section">
+        <div class="container">
+          <div class="section-title-wrap text-center">
+            <h2 class="section-heading">How Kazi Solves the Trust Problem</h2>
+            <p class="section-subheading">We are not just a phonebook. We make accountability and reliability visible.</p>
+          </div>
+
+          <div class="pillars-grid">
+            <div class="pillar-card">
+              <div class="pillar-icon">🔒</div>
+              <h3 class="pillar-title">Locked Agreed Price</h3>
+              <p class="pillar-text">
+                Agree on the exact price in Naira (₦) before work starts. That price is permanently recorded on the job card and visible throughout.
+              </p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon">⏱️</div>
+              <h3 class="pillar-title">Milestone Tracking</h3>
+              <p class="pillar-text">
+                Track status from <em>Agreed</em> to <em>In Progress</em> to <em>Completed</em>. No more wondering if someone will show up today or next week.
+              </p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon">🛡️</div>
+              <h3 class="pillar-title">Verified Job Reviews</h3>
+              <p class="pillar-text">
+                Only customers with an actual completed Kazi job record can leave reviews. No fake ratings, no friend-and-family astroturfing.
+              </p>
+            </div>
+
+            <div class="pillar-card">
+              <div class="pillar-icon">⚖️</div>
+              <h3 class="pillar-title">Preserve What Happened</h3>
+              <p class="pillar-text">
+                If an artisan arrives late or demands extra money, it is documented as a factual customer report on the job history.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Providers in Abuja -->
+      <section class="home-section container">
+        <div class="section-title-wrap">
+          <div>
+            <h2 class="section-heading">Featured Trusted Providers in Abuja</h2>
+            <p class="section-subheading">High completion rate, punctual arrival, and verified customer track records</p>
+          </div>
+          <a href="#directory" class="link-more" onclick="KaziApp.showDirectory()">Explore all 24 artisans →</a>
+        </div>
+        <div class="providers-grid-layout" id="featured-providers-grid">
+          <!-- Populated by js/app.js -->
+        </div>
+      </section>
+
+      <!-- Recent Verified Job Activity Ticker -->
+      <section class="activity-section container">
+        <div class="activity-card">
+          <div class="activity-badge">🟢 Recent Verified Activity</div>
+          <div class="activity-ticker-content">
+            <p class="activity-text">
+              <strong>Funke A.</strong> in Wuse II completed electrical work with <strong>Chinedu Okafor</strong> for <strong>₦32,000</strong> · <em>"Punctual arrival, respected agreed price"</em>
+            </p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- 2. DIRECTORY SCREEN -->
+    <section class="screen-section" id="screen-directory">
+      <div class="container directory-page-container">
+        <div class="directory-header-row">
+          <div>
+            <h1 class="page-title">Abuja Service Providers Directory</h1>
+            <p class="page-sub">Find verified electricians, plumbers, mechanics, tailors, and cleaners in Abuja</p>
+          </div>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div class="filters-bar-card">
+          <div class="filter-item search-filter">
+            <label for="search-providers-input" class="filter-label">Search Keyword or Name</label>
+            <input type="text" id="search-providers-input" class="filter-input" placeholder="e.g. Chinedu, Inverter, Gwarinpa...">
+          </div>
+
+          <div class="filter-item">
+            <label for="filter-category-select" class="filter-label">Category</label>
+            <select id="filter-category-select" class="filter-select">
+              <option value="all">All Categories</option>
+              <option value="Electrician">Electricians (5)</option>
+              <option value="Plumber">Plumbers (5)</option>
+              <option value="Mechanic">Mechanics (5)</option>
+              <option value="Tailor">Tailors (3)</option>
+              <option value="Cleaner">Cleaners (3)</option>
+              <option value="Barber">Barbers (3)</option>
+              <option value="AC Technician">AC Technicians (2)</option>
+              <option value="Painter">Painters (2)</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="filter-area-select" class="filter-label">Abuja Area</label>
+            <select id="filter-area-select" class="filter-select">
+              <option value="all">All Abuja Areas</option>
+              <option value="Wuse II">Wuse II</option>
+              <option value="Maitama">Maitama</option>
+              <option value="Garki">Garki</option>
+              <option value="Jabi">Jabi</option>
+              <option value="Utako">Utako</option>
+              <option value="Gwarinpa">Gwarinpa</option>
+              <option value="Apo">Apo</option>
+              <option value="Kubwa">Kubwa</option>
+              <option value="Asokoro">Asokoro</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="sort-providers-select" class="filter-label">Sort By</label>
+            <select id="sort-providers-select" class="filter-select">
+              <option value="rating">Highest Rated</option>
+              <option value="jobs">Most Completed Jobs</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Providers Grid -->
+        <div class="providers-grid-layout" id="providers-grid">
+          <!-- Populated by js/providers.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PROVIDER PROFILE VIEW -->
+    <section class="screen-section" id="screen-provider-profile">
+      <div class="container" id="provider-profile-view">
+        <!-- Rendered dynamically by js/providers.js -->
+      </div>
+    </section>
+
+    <!-- 4. MY JOBS SCREEN (Customer Dashboard) -->
+    <section class="screen-section" id="screen-my-jobs">
+      <div class="container my-jobs-container">
+        <div class="jobs-page-header">
+          <div>
+            <h1 class="page-title">My Jobs & Service History</h1>
+            <p class="page-sub">Track active agreements, verify milestones, and view your completed jobs history</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="KaziApp.openCreateJobModal()">+ Create New Job</button>
+        </div>
+
+        <!-- Tabs: Active, Completed, Issues -->
+        <div class="jobs-tab-bar" role="tablist">
+          <button class="job-tab-btn tab-active" data-tab="active" onclick="KaziJobs.setTab('active')">
+            Active Agreements <span class="tab-badge" id="tab-count-active">1</span>
+          </button>
+          <button class="job-tab-btn" data-tab="completed" onclick="KaziJobs.setTab('completed')">
+            Completed Jobs <span class="tab-badge" id="tab-count-completed">1</span>
+          </button>
+          <button class="job-tab-btn" data-tab="issues" onclick="KaziJobs.setTab('issues')">
+            Reported Issues <span class="tab-badge tab-badge-danger" id="tab-count-issues">1</span>
+          </button>
+        </div>
+
+        <!-- Jobs List -->
+        <div class="jobs-list-layout" id="my-jobs-list">
+          <!-- Rendered by js/jobs.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PROVIDER DASHBOARD (Artisan View) -->
+    <section class="screen-section" id="screen-provider-dashboard">
+      <div class="container" id="provider-dashboard-content">
+        <!-- Rendered by js/app.js for Chinedu Okafor -->
+      </div>
+    </section>
+
+    <!-- 6. SETTINGS & BACKUP SCREEN -->
+    <section class="screen-section" id="screen-settings">
+      <div class="container settings-container">
+        <h1 class="page-title">Settings & Data Management</h1>
+        <p class="page-sub">Manage offline storage, JSON backup and restore, and demo personas</p>
+
+        <div class="settings-grid">
+          <!-- Backup & Restore Card -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <span class="settings-icon">💾</span>
+              <div>
+                <h3 class="settings-title">Offline Data Backup & Restore</h3>
+                <p class="settings-desc">Export your jobs, reviews, and provider notes as a clean JSON file, or restore from a previous backup.</p>
+              </div>
+            </div>
+
+            <div class="settings-actions-group">
+              <button class="btn btn-primary" id="btn-export-json">
+                ⬇️ Export Data as JSON
+              </button>
+              <div class="file-import-wrap">
+                <label for="import-file-input" class="btn btn-outline import-btn-label">
+                  ⬆️ Restore from JSON Backup
+                </label>
+                <input type="file" id="import-file-input" accept=".json,application/json" style="display: none;">
+              </div>
+            </div>
+
+            <div class="settings-callout">
+              <strong>Notice:</strong> Restoring a backup validates data integrity before updating LocalStorage. Existing browser data is only replaced upon explicit confirmation.
+            </div>
+          </div>
+
+          <!-- Demo Persona Switcher -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <span class="settings-icon">👤</span>
+              <div>
+                <h3 class="settings-title">Active Persona / User Role</h3>
+                <p class="settings-desc">Simulate both sides of the Kazi marketplace without backend credentials.</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="settings-role-select" class="filter-label">Switch Active Persona</label>
+              <select id="settings-role-select" class="filter-select">
+                <option value="customer">Customer: Funke Adeyemi (Wuse II, Abuja)</option>
+                <option value="provider">Provider: Chinedu Okafor (Electrician · Wuse II)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Reset to Demo Data -->
+          <div class="settings-card danger-card">
+            <div class="settings-card-header">
+              <span class="settings-icon">🔄</span>
+              <div>
+                <h3 class="settings-title">Reset to Default Abuja Data</h3>
+                <p class="settings-desc">Wipe changes made in this browser and re-initialize the standard 24 Abuja artisans, seed jobs, and reviews.</p>
+              </div>
+            </div>
+
+            <button class="btn btn-danger" id="btn-reset-seed">
+              Reset to Demo Data
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODALS & DIALOGS ================= -->
+
+  <!-- 1. CREATE JOB MODAL -->
+  <div class="modal-wrapper" id="create-job-modal" role="dialog" aria-modal="true" aria-labelledby="create-job-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="create-job-modal-title">🤝 Agree on a Job Record</h2>
+        <button class="modal-close-btn" data-close-modal aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="create-job-form">
+        <div class="modal-body">
+          <p class="modal-explainer">
+            Creating a job record locks the agreed price and date. Both parties can reference this record, and only completed jobs can be reviewed.
+          </p>
+
+          <div class="form-group">
+            <label for="job-provider-select" class="form-label">Service Provider</label>
+            <select id="job-provider-select" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="job-service-select" class="form-label">Service Needed</label>
+            <select id="job-service-select" class="form-control" required></select>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="job-price-input" class="form-label">Agreed Price (₦ Naira)</label>
+              <div class="naira-input-wrap">
+                <span class="naira-prefix">₦</span>
+                <input type="number" id="job-price-input" class="form-control naira-field" placeholder="32000" min="1000" step="500" required>
+              </div>
+              <span class="form-hint">Locked throughout job duration</span>
+            </div>
+
+            <div class="form-group">
+              <label for="job-date-input" class="form-label">Agreed Service Date</label>
+              <input type="date" id="job-date-input" class="form-control" required>
+              <span class="form-hint">Agreed arrival date</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="job-description-input" class="form-label">Scope of Work / Task Description</label>
+            <textarea id="job-description-input" class="form-control" rows="3" placeholder="Describe the specific task, e.g. Fix tripping breaker board, inspect main conduit connection and install 63A surge isolator..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="job-notes-input" class="form-label">Access Notes or Special Instructions (Optional)</label>
+            <input type="text" id="job-notes-input" class="form-control" placeholder="e.g. Wuse II near Banex plaza. Security gate pass will be texted.">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-create-job">Create Job Agreement</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. JOB DETAILS MODAL -->
+  <div class="modal-wrapper" id="job-details-modal" role="dialog" aria-modal="true" aria-labelledby="job-details-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <h2 class="modal-title" id="job-details-modal-title">📋 Official Job Agreement Record</h2>
+        <button class="modal-close-btn" data-close-modal aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body" id="job-details-content">
+        <!-- Rendered by js/jobs.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SUBMIT VERIFIED REVIEW MODAL -->
+  <div class="modal-wrapper" id="submit-review-modal" role="dialog" aria-modal="true" aria-labelledby="submit-review-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="submit-review-modal-title">★ Verified Job Review</h2>
+        <button class="modal-close-btn" data-close-modal aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="submit-review-form">
+        <input type="hidden" id="review-job-id">
+        <input type="hidden" id="review-provider-id">
+
+        <div class="modal-body">
+          <div id="review-job-context"></div>
+
+          <!-- Star Rating Picker -->
+          <div class="review-rating-block">
+            <label class="form-label">Overall Rating</label>
+            <div class="star-picker-row">
+              <button type="button" class="star-picker-btn star-active" data-value="1">★</button>
+              <button type="button" class="star-picker-btn star-active" data-value="2">★</button>
+              <button type="button" class="star-picker-btn star-active" data-value="3">★</button>
+              <button type="button" class="star-picker-btn star-active" data-value="4">★</button>
+              <button type="button" class="star-picker-btn star-active" data-value="5">★</button>
+              <span class="rating-label-text" id="review-rating-label">Excellent (5/5)</span>
+            </div>
+          </div>
+
+          <!-- 3 Binary Accountability Checks -->
+          <div class="accountability-checks-box">
+            <h4 class="checks-heading">Accountability Checklist</h4>
+            <p class="checks-sub">These answers help build a genuine reputation record for artisans in Abuja.</p>
+
+            <div class="check-item-row">
+              <span class="check-question">1. Did the provider arrive as agreed?</span>
+              <div class="check-radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="rev-arrived" value="true" checked> Yes
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="rev-arrived" value="false"> No / Late
+                </label>
+              </div>
+            </div>
+
+            <div class="check-item-row">
+              <span class="check-question">2. Was the agreed price respected?</span>
+              <div class="check-radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="rev-price" value="true" checked> Yes
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="rev-price" value="false"> No / Price Changed
+                </label>
+              </div>
+            </div>
+
+            <div class="check-item-row">
+              <span class="check-question">3. Was the job completed satisfactorily?</span>
+              <div class="check-radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="rev-completed" value="true" checked> Yes
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="rev-completed" value="false"> No / Incomplete
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Written Review -->
+          <div class="form-group">
+            <label for="review-text-input" class="form-label">Written Feedback</label>
+            <textarea id="review-text-input" class="form-control" rows="3" placeholder="Share your experience (e.g. arrived punctually, brought proper tools, cleaned up site, respected the agreed price)..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-review">Publish Verified Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. REPORT ISSUE MODAL -->
+  <div class="modal-wrapper" id="report-issue-modal" role="dialog" aria-modal="true" aria-labelledby="report-issue-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="report-issue-modal-title">⚠️ Report a Problem with this Job</h2>
+        <button class="modal-close-btn" data-close-modal aria-label="Close dialog">&times;</button>
+      </div>
+
+      <form id="report-issue-form">
+        <input type="hidden" id="issue-job-id">
+
+        <div class="modal-body">
+          <div class="issue-summary-box" id="issue-job-summary"></div>
+
+          <div class="form-group">
+            <label for="issue-type-select" class="form-label">Issue Category</label>
+            <select id="issue-type-select" class="form-control" required>
+              <option value="Provider Did Not Arrive">Provider Did Not Arrive ("I'm coming" failure)</option>
+              <option value="Price Changed on Site">Price Changed on Site / Demand for Extra Money</option>
+              <option value="Job Left Incomplete">Job Left Incomplete / Abandoned</option>
+              <option value="Poor Quality / Defective Work">Poor Quality or Defective Workmanship</option>
+              <option value="Property Damage / Unprofessional Conduct">Property Damage or Unprofessional Conduct</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="issue-description-input" class="form-label">Factual Description of What Happened</label>
+            <textarea id="issue-description-input" class="form-control" rows="4" placeholder="State facts clearly (e.g. Provider arrived 3 hours late and asked for an additional ₦15,000 for materials despite initial agreement)..." required></textarea>
+          </div>
+
+          <div class="issue-disclaimer-note">
+            Kazi records your report as an official entry on this job agreement. The initial agreed price remains locked in the record.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-danger" id="btn-confirm-report-issue">Submit Issue Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Root -->
+  <div id="kazi-toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <span class="logo-mark">⚡</span>
+          <span class="logo-text">Kazi</span>
+        </div>
+        <p class="footer-tagline">Making reliability and accountability visible in Nigerian urban services.</p>
+        <p class="footer-location">📍 Abuja, Federal Capital Territory, Nigeria</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Service Trades</h4>
+          <ul>
+            <li><a href="#directory" onclick="KaziApp.filterByCategoryAndNavigate('Electrician')">Electricians in Abuja</a></li>
+            <li><a href="#directory" onclick="KaziApp.filterByCategoryAndNavigate('Plumber')">Plumbers in Abuja</a></li>
+            <li><a href="#directory" onclick="KaziApp.filterByCategoryAndNavigate('Mechanic')">Auto Mechanics</a></li>
+            <li><a href="#directory" onclick="KaziApp.filterByCategoryAndNavigate('Tailor')">Bespoke Tailors</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Accountability</h4>
+          <ul>
+            <li><a href="#home">Fixed Agreed Prices</a></li>
+            <li><a href="#home">Verified Job Reviews</a></li>
+            <li><a href="#settings">Backup & Data Portability</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>© 2026 Kazi Platform. Prototype MVP. Verified reviews are attached exclusively to completed Kazi jobs.</p>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/providers.js"></script>
+  <script src="js/jobs.js"></script>
+  <script src="js/reviews.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
