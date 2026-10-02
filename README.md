@@ -242,32 +242,26 @@ Every registered user on Kazi receives a permanent, unique Kazi ID:
 
 ---
 
-## 12. Future Improvements
+## 15. Future Improvements
 
 - Backend API integration with Node.js/PostgreSQL.
 - SMS and WhatsApp milestone notifications via Twilio/Africa's Talking.
 - Payment escrow integration with Paystack or Flutterwave.
 - Artisan Guild verification badges and national ID verification (NIN).
 - Expansion to Lagos, Port Harcourt, Ibadan, and Kano.
-
-
----
-
-## 15.Future features includes but not limited to:
-In-app payments
-Escrow
-Commission processing
-Live GPS tracking
-Real-time messaging
-Video calls
-Complex provider scheduling
-Automated price negotiation
-AI matching
-Background checks
-Government ID verification
-Insurance
-Financing
-Provider subscriptions
-Complex dispute resolution
-Multi-city logistics
-Native mobile apps
+- In-app payments
+- Commission processing
+- Live GPS tracking
+- Real-time messaging
+- Video calls
+- Complex provider scheduling
+- Automated price negotiation
+- AI matching
+- Background checks
+- Government ID verification
+- Insurance
+- Financing
+- Provider subscriptions
+- Complex dispute resolution
+- Multi-city logistics
+- Native mobile apps
