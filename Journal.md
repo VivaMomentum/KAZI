@@ -181,3 +181,76 @@ Every single screen, interaction, data field, and status code must support this 
 | Offline LocalStorage Persistence | **PASS** | State survives browser reload |
 | JSON Backup & Restore | **PASS** | Export, schema validation, and confirmation restore |
 
+---
+
+## 9. Feature Update: Authentication, User Profiles & Unique Kazi IDs
+
+### 9.1 Why Authentication Was Added
+The initial MVP prototype used an instant persona switcher, which lacked true user identity, account ownership, and data accountability. Customers and artisans had overlapping views without personalized dashboards, profile editing was not possible, and counterparty records had no permanent user ID to reference. Adding client-side authentication and role-based profiles establishes account ownership, enables distinct Customer and Artisan workflows, and introduces permanent accountability records via unique Kazi IDs.
+
+### 9.2 How Customer and Artisan Experiences Were Separated
+1. **Dynamic Navigation:** Header navigation and mobile drawer dynamically adapt based on active session role:
+   - **Customer:** Displays `Home`, `Find Services`, `My Jobs`, `My Profile`, `Settings`, and `Log Out`.
+   - **Artisan:** Displays `Home`, `Directory`, `Artisan Dashboard`, `My Jobs`, `Professional Profile`, `Settings`, and `Log Out`.
+   - **Logged Out:** Displays `Home`, `Find Artisans`, `Log In`, and `Sign Up`.
+2. **Customer Dashboard (`#screen-customer-dashboard`):**
+   - Welcomes the customer with their name and permanent Kazi ID (`KZ-CUS-XXXXXX`).
+   - Displays KPI cards: Active Jobs count, Jobs Awaiting Review count, Completed Jobs count.
+   - Highlights an "Awaiting Review" prompt when completed work has not yet been reviewed, driving the core accountability loop.
+   - Quick CTA: `+ Find a Service`.
+3. **Artisan Dashboard (`#screen-artisan-dashboard`):**
+   - Displays professional credentials and permanent Kazi ID (`KZ-ART-XXXXXX`).
+   - Displays KPI cards: Average Star Rating (★), Verified Reviews Count, Completed Jobs Count, Active Agreements, Tracked Agreed Earnings (in ₦).
+   - Lists active and scheduled jobs with counterparty Customer Kazi IDs, agreed price, date, and milestone progression buttons (`Start Job`, `Mark Completed`).
+   - Displays customer feedback stream with arrival punctuality and price-respect checkmarks.
+4. **Route Protection Guards:**
+   - Protected routes (`customer-dashboard`, `artisan-dashboard`, `my-jobs`, `customer-profile`, `artisan-profile`, `settings`) check `KaziStorage.getCurrentUser()`. Unauthenticated users are redirected to `#login`.
+   - Role separation is enforced: Customers attempting to access artisan views are redirected to their customer dashboard; artisans attempting to access customer views are redirected to their artisan dashboard.
+
+### 9.3 Permanent Unique Kazi ID Generation Strategy
+- **Format:**
+  - Customer: `KZ-CUS-000001`, `KZ-CUS-000002`, ...
+  - Artisan: `KZ-ART-000001`, `KZ-ART-000002`, ..., `KZ-ART-000024`, ...
+- **Persistent Registry:** A dedicated LocalStorage key `kazi_id_registry` stores all issued IDs alongside persistent counters (`kazi_counter_cus`, `kazi_counter_art`). If a user account is deleted, the ID is never recycled.
+- **Immutability Guarantee:** Once issued, the Kazi ID is permanent. Profile updates to name, phone, email, or trade do not alter the ID.
+
+### 9.4 Profile Editing & Cross-System Synchronization
+- **Customer Profile:** Allows viewing and modifying Full Name, Email, Phone, City, Address/Landmark, and Preferred Contact Method. When saved, updates persist to `kazi_users` and synchronize `customerName` across counterparty job records without creating duplicate records.
+- **Artisan Profile:**
+  - *Private Info:* Full Name, Email, Phone, City.
+  - *Public Trade Info:* Primary Trade, Experience Years, Typical Price Min/Max, Service Areas, Services Offered, Availability, Bio.
+  - When saved, updates persist to `kazi_users`, automatically update the `kazi_providers` catalog entry, and synchronize `providerName` on all associated job cards.
+- **Public vs Private Boundary:** Customers cannot be browsed in any public directory. Artisan public profiles show trade credentials, reviews, and Kazi ID without leaking private email/phone/password credentials.
+
+### 9.5 Existing Data Migration Strategy
+When `KaziStorage.init()` runs:
+1. `runMigration()` checks existing LocalStorage data.
+2. Identifies any user or seed provider missing a `kaziId`.
+3. Issues sequential permanent IDs to existing seed providers (`KZ-ART-000001` through `KZ-ART-000024`).
+4. Creates matching demo customer (`KZ-CUS-000001`, Vivian Dike) and demo artisan (`KZ-ART-000001`, Chinedu Okafor) accounts with password `demo123`.
+5. Preserves all existing jobs, reviews, and provider notes intact without data loss.
+
+### 9.6 Technical Challenges & Solutions
+1. **Challenge:** LocalStorage string parsing for session values.
+   - *Impact:* Raw string IDs stored unquoted caused `SyntaxError` when parsed with `JSON.parse`.
+   - *Solution:* Standardized all primitives using `JSON.stringify()` in `set()` and updated `get()` to fall back safely to raw string values.
+2. **Challenge:** Zero CSS Variables constraint for rich role dashboards.
+   - *Impact:* Styling complex dashboards, cards, badges, and forms without custom properties.
+   - *Solution:* Handcrafted direct hex/rgb declarations matching the emerald/teal/slate color scheme across all new auth and dashboard classes in `css/styles.css`.
+3. **Challenge:** Profile update name synchronization.
+   - *Impact:* Editing an artisan's name could result in orphaned or desynchronized job records.
+   - *Solution:* Implemented bidirectional sync in `KaziStorage.updateUser()` so changes to user records automatically propagate to `kazi_providers` and active/completed job cards.
+
+### 9.7 Test Suite Expansion & Verification
+The automated test runner (`test_acceptance.js`) was extended from 7 to 14 comprehensive tests:
+- Test 8: Data migration & Kazi ID assignment verification (**PASS**)
+- Test 9: Authentication, demo accounts, and session logout (**PASS**)
+- Test 10: New customer registration & sequential ID `KZ-CUS-000002` (**PASS**)
+- Test 11: New artisan registration & sequential ID `KZ-ART-000025` + directory sync (**PASS**)
+- Test 12: Artisan profile edit, Kazi ID immutability, and provider catalog sync (**PASS**)
+- Test 13: Customer profile edit, Kazi ID immutability, and job customer name sync (**PASS**)
+- Test 14: Public vs private separation & directory privacy (**PASS**)
+
+All 14/14 acceptance tests pass with 100% success.
+
+

@@ -8,21 +8,26 @@ const KaziJobs = (function() {
   let activeTab = 'active'; // 'active', 'completed', 'issues'
 
   /**
-   * Returns list of jobs for current user context (customer or provider)
+   * Returns list of jobs for current user context (customer or artisan)
    */
   function getUserJobs() {
     const allJobs = KaziStorage.getJobs();
-    const currentRole = KaziStorage.getCurrentRole();
     const currentUser = KaziStorage.getCurrentUser();
+    if (!currentUser) return [];
 
-    if (currentRole === 'provider') {
-      // Return jobs assigned to this provider
-      const providerId = currentUser?.providerId || 'prv_001';
-      return allJobs.filter(j => j.providerId === providerId);
+    if (currentUser.role === 'artisan') {
+      const providerId = currentUser.providerId || 'prv_001';
+      return allJobs.filter(j => 
+        j.providerId === providerId || 
+        (j.providerKaziId && j.providerKaziId === currentUser.kaziId) ||
+        (j.providerName && j.providerName.toLowerCase() === currentUser.fullName.toLowerCase())
+      );
     } else {
-      // Return jobs created by this customer
-      const customerId = currentUser?.id || 'usr_customer_01';
-      return allJobs.filter(j => j.customerId === customerId);
+      const customerId = currentUser.id || 'usr_customer_01';
+      return allJobs.filter(j => 
+        j.customerId === customerId || 
+        (j.customerKaziId && j.customerKaziId === currentUser.kaziId)
+      );
     }
   }
 
@@ -147,8 +152,11 @@ const KaziJobs = (function() {
         <div class="job-card-header">
           <div class="job-provider-summary">
             <span class="job-category-tag">${job.category || 'Service'}</span>
-            <h3 class="job-card-title">${job.providerName} — ${job.serviceName || 'Custom Service'}</h3>
-            <span class="job-card-date">Agreed Date: <strong>${formattedDate}</strong></span>
+            <h3 class="job-card-title">${isCustomer ? `${job.providerName} — ${job.serviceName || 'Custom Service'}` : `Customer: ${job.customerName || 'Client'} — ${job.serviceName || 'Service'}`}</h3>
+            <div class="job-counterparty-meta">
+              <span class="job-kazi-id-tag">${isCustomer ? `Artisan ID: <strong>${job.providerKaziId || 'KZ-ART-000001'}</strong>` : `Client ID: <strong>${job.customerKaziId || 'KZ-CUS-000001'}</strong>`}</span> · 
+              <span class="job-card-date">Agreed Date: <strong>${formattedDate}</strong></span>
+            </div>
           </div>
           <div class="job-badge-column">
             ${KaziUI.renderStatusBadge(job.status)}
@@ -314,16 +322,18 @@ const KaziJobs = (function() {
 
         <div class="dossier-grid">
           <div class="dossier-item">
+            <span class="dossier-label">Customer</span>
+            <strong>${job.customerName || 'Vivian Dike'}</strong>
+            <span class="dossier-sub-id">${job.customerKaziId || 'KZ-CUS-000001'}</span>
+          </div>
+          <div class="dossier-item">
+            <span class="dossier-label">Artisan</span>
+            <strong>${job.providerName}</strong>
+            <span class="dossier-sub-id">${job.providerKaziId || 'KZ-ART-000001'}</span>
+          </div>
+          <div class="dossier-item">
             <span class="dossier-label">Agreed Service Date</span>
             <strong>${formattedDate}</strong>
-          </div>
-          <div class="dossier-item">
-            <span class="dossier-label">Customer</span>
-            <strong>${job.customerName || 'Funke Adeyemi'}</strong>
-          </div>
-          <div class="dossier-item">
-            <span class="dossier-label">Provider Contact</span>
-            <strong>${provider?.phone || 'Available in profile'}</strong>
           </div>
           <div class="dossier-item">
             <span class="dossier-label">Created On</span>

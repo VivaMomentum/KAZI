@@ -146,32 +146,99 @@ Sample completed jobs and verified reviews are pre-attached so provider reputati
 
 ---
 
-## 10. Available User Roles
+## 10. Authentication & Demo Accounts
 
-1. **Customer View (Default — Funke Adeyemi):**
-   - Search & filter providers.
-   - View provider ratings and verified customer reviews.
-   - Hire provider / Agree on a job (price, date, scope).
-   - Track active jobs in "My Jobs".
-   - Progress job status (`Agreed` → `In Progress` → `Completed`).
-   - Report issues (late arrival, price changed, poor quality).
-   - Submit verified reviews upon completion.
+Kazi features a dedicated client-side authentication and session management system built on LocalStorage. It allows you to experience separate Customer and Artisan accounts without needing a backend server.
 
-2. **Provider View (Chinedu Okafor — Electrician):**
-   - Access the Provider Dashboard.
-   - View assigned customer requests and ongoing jobs.
-   - View cumulative earnings based on completed agreed prices.
-   - Review incoming verified reviews and reputation rating.
+### Demo Credentials (1-Click Fill Available on Login)
 
-Toggle seamlessly between roles via the role selector in the top navigation header.
+| Account Role | Demo Email | Demo Password | Default Name | Permanent Kazi ID | Primary District / Trade |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Customer** | `customer@kazi.demo` | `demo123` | Vivian Dike | `KZ-CUS-000001` | Wuse II, Abuja |
+| **Artisan** | `artisan@kazi.demo` | `demo123` | Chinedu Okafor | `KZ-ART-000001` | Electrician · Wuse II |
+
+*(You can also register brand-new Customer and Artisan accounts via the Sign Up screen).*
 
 ---
 
-## 11. Known Limitations
+## 11. Creating an Account & Login Flow
 
-- **Client-Side Prototype:** Data is stored in browser LocalStorage. Data is isolated to the specific browser instance unless exported/imported via JSON.
-- **No Payment Gateway:** Escrow and online payments are simulated through clear agreement records; actual funds exchange happens offline via cash/transfer.
-- **Prototype Auth:** Authentication is simulated via an instant persona switcher rather than email/password tokens.
+### Sign Up Flow
+1. Click **Sign Up** in the top navigation header.
+2. Select your account type:
+   - **Customer:** For individuals and businesses looking to hire trusted local service providers.
+   - **Artisan / Service Provider:** For skilled tradespeople offering professional services.
+3. Fill out the registration fields:
+   - *Customer:* Full Name, Email, Phone, City, Password, Confirm Password.
+   - *Artisan:* Additionally specifies Primary Trade (Electrician, Plumber, Tailor, etc.), Years of Experience, Typical Price Range (Min/Max ₦), Service Areas in Abuja, and Professional Bio.
+4. Click **Create Account**:
+   - Generates a permanent, unique Kazi ID.
+   - Automatically initializes your authenticated session in LocalStorage.
+   - If registering as an artisan, automatically creates your public directory listing in the Abuja catalogue.
+   - Immediately redirects to your role-specific dashboard.
+
+### Login Flow
+1. Click **Log In** in the top navigation header.
+2. Enter your registered email or phone number and password.
+3. Alternatively, click either of the **1-Click Demo Fill buttons**:
+   - `👤 Customer Demo (Vivian)`
+   - `🛠️ Artisan Demo (Chinedu)`
+4. Click **Log In**: Your active session is saved to `kazi_active_user_id` and your role-appropriate dashboard loads.
+
+---
+
+## 12. Customer vs. Artisan Experience
+
+### Customer Journey
+* **Navigation:** Home · Find Services · My Jobs · My Profile · Settings · Log Out.
+* **Customer Dashboard:**
+  * Greeting with permanent Customer Kazi ID badge.
+  * KPI summary cards: Active Jobs, Jobs Awaiting Review, Total Completed.
+  * Awaiting Review Alert Banner: Prompts customer to review completed jobs to enforce the accountability loop.
+  * Quick Action: `+ Find a Service`.
+  * Active service agreements cards with direct link to view agreement records.
+* **Customer Profile:** View and edit personal contact details (Full Name, Email, Phone, City, Delivery Address, Preferred Contact Method). Changes instantly propagate to active and historical job cards without creating duplicate user records.
+* **Privacy:** Customers do not have a public marketplace profile and cannot be browsed by other users in any directory.
+
+### Artisan / Service Provider Journey
+* **Navigation:** Home · Directory · Artisan Dashboard · My Jobs · Professional Profile · Settings · Log Out.
+* **Artisan Dashboard:**
+  * Greeting with permanent Artisan Kazi ID badge and trade indicator.
+  * KPI summary cards: Customer Rating (★), Verified Reviews Count, Completed Jobs Count, Active Agreements, Tracked Agreed Earnings (in ₦).
+  * Active & Scheduled Jobs list showing counterparty customer name, Customer Kazi ID, agreed arrival date, locked agreed price, and milestone progression buttons (`Start Job`, `Mark Completed`).
+  * Recent customer review feedback feed with arrival and price-respect checkmarks.
+* **Professional Profile:**
+  * *Private Account Info:* Full Name, Email, Phone, City (kept private).
+  * *Public Trade Info:* Primary Trade, Experience Years, Typical Price Range, Service Areas, Services Offered, Bio.
+  * Profile edits update the user account, synchronize the public Abuja directory listing, and update provider names across all counterparty job records.
+* **Public Profile:** Customers can view the artisan's public profile on the directory displaying their trade credentials, completed jobs, verified reviews, and permanent Kazi ID (`KZ-ART-XXXXXX`) without exposing private account credentials.
+
+### Access Protection & Route Guards
+* Logged-out guests cannot access protected screens (`My Jobs`, `My Profile`, `Customer Dashboard`, `Artisan Dashboard`, `Settings`) and are redirected to `#login`.
+* Logged-in customers attempting to access `#artisan-dashboard` or `#artisan-profile` are automatically redirected to `#customer-dashboard`.
+* Logged-in artisans attempting to access `#customer-dashboard` or `#customer-profile` are automatically redirected to `#artisan-dashboard`.
+
+---
+
+## 13. Permanent Unique Kazi ID System
+
+Every registered user on Kazi receives a permanent, unique Kazi ID:
+* **Customer Prefix:** `KZ-CUS-000001`, `KZ-CUS-000002`, ...
+* **Artisan Prefix:** `KZ-ART-000001`, `KZ-ART-000002`, ..., `KZ-ART-000024`, ...
+
+### Guarantees:
+1. **Generated Once at Creation:** Issued sequentially upon registration.
+2. **Permanent & Immutable:** Never changes when a user edits their name, phone, email, or trade profile.
+3. **Persistently Registered:** Tracked in a persistent registry (`kazi_id_registry`) in LocalStorage to ensure IDs are never reused even if an account is deleted.
+4. **Counterparty Accountability:** The customer's Kazi ID is attached to job records and verified reviews; the artisan's Kazi ID is displayed on public cards, directory profiles, and job agreements.
+
+---
+
+## 14. Authentication Limitations (MVP Prototype)
+
+* **Client-Side Prototype:** This is a frontend demo authentication system using browser LocalStorage. Passwords are saved in LocalStorage for demo credential verification and are not cryptographically hashed with salting or bcrypt.
+* **No Server Sessions or JWTs:** Intended for prototyping, user testing, and architectural validation. Do not use production sensitive credentials.
+* **Browser Isolation:** User sessions and data are bound to the specific browser instance unless backed up and restored via JSON export/import.
 
 ---
 
@@ -182,3 +249,23 @@ Toggle seamlessly between roles via the role selector in the top navigation head
 - Payment escrow integration with Paystack or Flutterwave.
 - Artisan Guild verification badges and national ID verification (NIN).
 - Expansion to Lagos, Port Harcourt, Ibadan, and Kano.
+
+
+Future features includes but not limited to:
+In-app payments
+Escrow
+Commission processing
+Live GPS tracking
+Real-time messaging
+Video calls
+Complex provider scheduling
+Automated price negotiation
+AI matching
+Background checks
+Government ID verification
+Insurance
+Financing
+Provider subscriptions
+Complex dispute resolution
+Multi-city logistics
+Native mobile apps

@@ -2638,3 +2638,667 @@ button, input, select, textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   AUTHENTICATION, ROLES & UNIQUE KAZI IDs (MVP PROTOTYPE)
+   Strictly zero CSS variables (var(--*)) used.
+   ========================================================================== */
+
+/* Nav Auth Groups & User Pill */
+.nav-auth-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 4px 12px 4px 6px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-user-pill:hover {
+  background-color: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.user-pill-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #047857;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.user-pill-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-pill-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.user-pill-id {
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #047857;
+}
+
+/* Mobile Nav User Header & Logout */
+.mobile-nav-user-header {
+  padding: 14px 16px;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-nav-user-header strong {
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.mobile-nav-user-header span {
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #047857;
+}
+
+.mobile-nav-logout-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #dc2626;
+  cursor: pointer;
+  border-top: 1px solid #fee2e2;
+  margin-top: 8px;
+}
+
+.mobile-nav-logout-btn:hover {
+  background-color: #fef2f2;
+}
+
+/* Permanent Kazi ID Badges */
+.badge-kazi-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.badge-kazi-id-cus {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-kazi-id-art {
+  background-color: #f0fdfa;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+}
+
+.kazi-id-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.06em;
+}
+
+/* Auth Pages (Login & Sign Up) */
+.auth-page-container {
+  max-width: 580px;
+  margin: 40px auto 60px auto;
+  padding: 0 16px;
+}
+
+.auth-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
+}
+
+.signup-card {
+  max-width: 640px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #ecfdf5;
+  border-radius: 12px;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.auth-form .form-group {
+  margin-bottom: 18px;
+}
+
+.auth-submit-btn {
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Role Selector Block in Signup */
+.role-selector-block {
+  margin-bottom: 24px;
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.role-toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.role-choice-btn {
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.role-choice-btn:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+.role-choice-btn.active {
+  border-color: #047857;
+  background-color: #f0fdf4;
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.12);
+}
+
+.role-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.role-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.role-desc {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+/* Artisan Extra Fields Divider */
+.artisan-fields-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0 18px 0;
+}
+
+.artisan-fields-divider::before,
+.artisan-fields-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.artisan-fields-divider span {
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0f766e;
+}
+
+/* Demo Quick Fill Box */
+.auth-demo-box {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.auth-demo-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
+.demo-buttons-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.demo-pill-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+.demo-hint-text {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.demo-hint-text code {
+  background-color: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.auth-footer-prompt {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.auth-switch-link {
+  color: #047857;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.auth-switch-link:hover {
+  text-decoration: underline;
+}
+
+/* Customer & Artisan Dashboards */
+.customer-dashboard-container {
+  max-width: 1080px;
+  margin: 32px auto 60px auto;
+  padding: 0 20px;
+}
+
+.dash-hero-banner {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  color: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.25);
+}
+
+.dash-user-meta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.dash-user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: #047857;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.dash-greeting {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.dash-kazi-id-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dash-city-tag {
+  font-size: 13px;
+  color: #a7f3d0;
+}
+
+.dash-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dash-stat-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.dash-stat-card.highlight-active {
+  border-color: #047857;
+  background-color: #f0fdf4;
+}
+
+.dash-stat-card.highlight-amber {
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+
+.stat-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.stat-card-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.stat-card-sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Awaiting Review Alert Banner */
+.awaiting-review-alert-card {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.awaiting-review-alert-card .alert-icon {
+  font-size: 28px;
+  color: #d97706;
+}
+
+.awaiting-review-alert-card .alert-content {
+  flex: 1;
+}
+
+.awaiting-review-alert-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 2px;
+}
+
+.awaiting-review-alert-card p {
+  font-size: 13px;
+  color: #b45309;
+  margin: 0;
+}
+
+.dash-section {
+  margin-bottom: 36px;
+}
+
+.dash-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.dash-jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dash-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dash-review-item {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.dash-rev-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dash-rev-comment {
+  font-size: 14px;
+  color: #334155;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.dash-rev-checks {
+  font-size: 12px;
+  color: #047857;
+  font-weight: 600;
+}
+
+/* User Profile Screens (Customer & Artisan) */
+.profile-page-container {
+  max-width: 780px;
+  margin: 36px auto 60px auto;
+  padding: 0 20px;
+}
+
+.profile-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.profile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.profile-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.profile-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.profile-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.profile-role-tag {
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.profile-note {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.profile-edit-form .form-group {
+  margin-bottom: 18px;
+}
+
+.profile-form-section {
+  padding-top: 16px;
+  margin-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.form-section-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.profile-form-actions {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Settings User Info Badge */
+.settings-user-info-wrap {
+  margin-top: 14px;
+}
+
+.settings-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+
+.user-avatar-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.user-kazi-id {
+  display: block;
+  font-size: 12px;
+  font-family: monospace;
+  color: #047857;
+  font-weight: 600;
+}

@@ -228,6 +228,177 @@ if (!restoreRes.success) throw new Error('Restore execution failed');
 
 console.log('✓ PASS: JSON Export, Validation, and Import restoration verified\n');
 
+// Test 8: Data Migration & Permanent Kazi IDs
+console.log('Test 8: Data Migration & Unique Kazi IDs');
+const users = KaziStorage.getUsers();
+console.log(`- Loaded ${users.length} registered users`);
+const allHaveKaziId = users.every(u => u.kaziId && (u.kaziId.startsWith('KZ-CUS-') || u.kaziId.startsWith('KZ-ART-')));
+if (!allHaveKaziId) throw new Error('Not all users have a valid Kazi ID!');
+
+const customerUser = users.find(u => u.role === 'customer');
+const artisanUser = users.find(u => u.role === 'artisan' && u.email === 'artisan@kazi.demo');
+console.log(`- Customer Demo: ${customerUser.fullName} (${customerUser.kaziId})`);
+console.log(`- Artisan Demo: ${artisanUser.fullName} (${artisanUser.kaziId})`);
+
+if (customerUser.kaziId !== 'KZ-CUS-000001') throw new Error(`Expected KZ-CUS-000001 for customer demo, got ${customerUser.kaziId}`);
+if (artisanUser.kaziId !== 'KZ-ART-000001') throw new Error(`Expected KZ-ART-000001 for artisan demo, got ${artisanUser.kaziId}`);
+
+// Verify all 24 providers have permanent Kazi IDs
+const allProvidersHaveId = KaziStorage.getProviders().every(p => p.kaziId && p.kaziId.startsWith('KZ-ART-'));
+if (!allProvidersHaveId) throw new Error('Not all providers have permanent Kazi IDs!');
+console.log('✓ PASS: All users and providers have valid permanent Kazi IDs\n');
+
+// Test 9: Authentication & Session Management
+console.log('Test 9: Authentication & Demo Accounts');
+// Invalid login
+const badLogin = KaziStorage.login('customer@kazi.demo', 'wrongpassword');
+if (badLogin.success) throw new Error('Invalid login unexpectedly succeeded');
+console.log('- Invalid password correctly rejected');
+
+// Valid customer login
+const customerLogin = KaziStorage.login('customer@kazi.demo', 'demo123');
+if (!customerLogin.success || customerLogin.user.role !== 'customer') {
+  throw new Error('Customer login failed with demo credentials');
+}
+console.log(`- Customer login succeeded: Active user = ${KaziStorage.getCurrentUser().fullName} (${KaziStorage.getCurrentUser().kaziId})`);
+
+// Logout
+KaziStorage.logout();
+if (KaziStorage.getCurrentUser() !== null || KaziStorage.isAuthenticated()) {
+  throw new Error('Logout failed to clear active session');
+}
+console.log('- Logout successfully cleared active session');
+
+// Valid artisan login
+const artisanLogin = KaziStorage.login('artisan@kazi.demo', 'demo123');
+if (!artisanLogin.success || artisanLogin.user.role !== 'artisan') {
+  throw new Error('Artisan login failed with demo credentials');
+}
+console.log(`- Artisan login succeeded: Active user = ${KaziStorage.getCurrentUser().fullName} (${KaziStorage.getCurrentUser().kaziId})`);
+console.log('✓ PASS: Authentication and session management verified\n');
+
+// Test 10: New Customer Registration & Sequential Kazi ID
+console.log('Test 10: Customer Registration & Sequential Kazi ID');
+const newCustomerRes = KaziStorage.register({
+  fullName: 'Emeka Nwosu',
+  email: 'emeka@example.com',
+  phone: '08023456789',
+  city: 'Abuja',
+  password: 'password123',
+  role: 'customer'
+});
+
+if (!newCustomerRes.success) throw new Error(`Customer registration failed: ${newCustomerRes.message}`);
+console.log(`- Registered New Customer: ${newCustomerRes.user.fullName}`);
+console.log(`- Generated Permanent Kazi ID: ${newCustomerRes.user.kaziId}`);
+if (newCustomerRes.user.kaziId !== 'KZ-CUS-000002') {
+  throw new Error(`Expected KZ-CUS-000002 for 2nd customer, got ${newCustomerRes.user.kaziId}`);
+}
+console.log('✓ PASS: Customer received unique sequential permanent Kazi ID\n');
+
+// Test 11: New Artisan Registration & Sequential Kazi ID + Catalog Sync
+console.log('Test 11: Artisan Registration & Catalog Synchronization');
+const newArtisanRes = KaziStorage.register({
+  fullName: 'Aisha Bello',
+  email: 'aisha@example.com',
+  phone: '08098765432',
+  city: 'Abuja',
+  password: 'password123',
+  role: 'artisan',
+  primaryService: 'Tailor',
+  yearsOfExperience: 6,
+  typicalPriceMin: 18000,
+  typicalPriceMax: 45000,
+  serviceAreas: ['Maitama', 'Wuse II', 'Asokoro'],
+  bio: 'Specialist in contemporary unisex native wear and bespoke corporate fits.'
+});
+
+if (!newArtisanRes.success) throw new Error(`Artisan registration failed: ${newArtisanRes.message}`);
+console.log(`- Registered New Artisan: ${newArtisanRes.user.fullName}`);
+console.log(`- Generated Permanent Kazi ID: ${newArtisanRes.user.kaziId}`);
+if (newArtisanRes.user.kaziId !== 'KZ-ART-000025') {
+  throw new Error(`Expected KZ-ART-000025 for 25th artisan, got ${newArtisanRes.user.kaziId}`);
+}
+
+// Verify new artisan is listed in the provider directory immediately
+const registeredProvider = KaziStorage.getProviderById(newArtisanRes.user.providerId);
+if (!registeredProvider) throw new Error('New artisan was not synced into kazi_providers!');
+console.log(`- Synced into public directory: ${registeredProvider.name} (${registeredProvider.category} · ${registeredProvider.kaziId})`);
+console.log('✓ PASS: Artisan registered, received KZ-ART-000025, and added to directory\n');
+
+// Test 12: Permanent Kazi ID Immutability & Profile Update Sync
+console.log('Test 12: Profile Editing & Kazi ID Immutability (Artisan)');
+const originalChineduId = artisanUser.kaziId; // KZ-ART-000001
+const userCountBefore = KaziStorage.getUsers().length;
+
+const updatedArtisan = KaziStorage.updateUser(artisanUser.id, {
+  fullName: 'Chinedu C. Okafor',
+  bio: 'Master Electrician with 12+ years of verified residential fault resolution.'
+});
+
+console.log(`- Updated Name: ${updatedArtisan.fullName}`);
+console.log(`- Permanent Kazi ID: ${updatedArtisan.kaziId} (Unchanged)`);
+
+if (updatedArtisan.kaziId !== originalChineduId) {
+  throw new Error('CRITICAL: Kazi ID changed during profile edit!');
+}
+
+const userCountAfter = KaziStorage.getUsers().length;
+if (userCountBefore !== userCountAfter) {
+  throw new Error('CRITICAL: Duplicate user record created during profile edit!');
+}
+
+// Check sync to kazi_providers
+const syncedChineduProvider = KaziStorage.getProviderById('prv_001');
+console.log(`- Directory Provider Name synced: ${syncedChineduProvider.name}`);
+if (syncedChineduProvider.name !== 'Chinedu C. Okafor') {
+  throw new Error('Profile update did not synchronize to kazi_providers directory!');
+}
+console.log('✓ PASS: Profile edit persisted without changing Kazi ID or duplicating user records\n');
+
+// Test 13: Customer Profile Editing & Sync
+console.log('Test 13: Customer Profile Editing & Name Sync');
+const updatedCustomer = KaziStorage.updateUser(customerUser.id, {
+  fullName: 'Vivian A. Dike',
+  phone: '08039998877'
+});
+
+console.log(`- Updated Customer Name: ${updatedCustomer.fullName}`);
+console.log(`- Customer Permanent Kazi ID: ${updatedCustomer.kaziId} (Unchanged)`);
+if (updatedCustomer.kaziId !== 'KZ-CUS-000001') {
+  throw new Error('Customer Kazi ID changed during profile edit!');
+}
+
+// Check that jobs with this customer were synced
+const vivianJobs = KaziStorage.getJobs().filter(j => j.customerId === customerUser.id);
+const allVivianJobsSynced = vivianJobs.every(j => j.customerName === 'Vivian A. Dike');
+if (!allVivianJobsSynced) {
+  throw new Error('Job counterparty customer name was not synced upon customer profile edit!');
+}
+console.log(`- Synced ${vivianJobs.length} active/completed jobs with updated customer name`);
+console.log('✓ PASS: Customer profile saved and counterparty job records updated\n');
+
+// Test 14: Public vs Private Information Separation
+console.log('Test 14: Public vs Private Information Separation');
+const publicDirectoryProviders = KaziStorage.getProviders();
+// Verify no customer is present in public directory
+const customersInDirectory = publicDirectoryProviders.filter(p => p.role === 'customer' || p.id.startsWith('usr_customer'));
+if (customersInDirectory.length > 0) {
+  throw new Error('Customers found in public provider directory!');
+}
+console.log(`- Verified: 0 customers in public artisan directory (${publicDirectoryProviders.length} total artisans)`);
+
+// Verify artisan public profile cards include Kazi ID & experience
+const cardHtml = KaziProviders.renderProviderCard(syncedChineduProvider);
+if (!cardHtml.includes('KZ-ART-000001')) {
+  throw new Error('Provider card does not display permanent Kazi ID!');
+}
+if (!cardHtml.includes('Chinedu C. Okafor')) {
+  throw new Error('Provider card does not display updated artisan name!');
+}
+console.log('✓ PASS: Directory privacy and public trade credential badges verified\n');
+
 console.log('========================================================');
-console.log('ALL ACCEPTANCE CRITERIA PASSED SUCCESSFULLY! (7/7)');
+console.log('ALL ACCEPTANCE CRITERIA PASSED SUCCESSFULLY! (14/14)');
 console.log('========================================================');
+

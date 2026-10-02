@@ -29,22 +29,39 @@
 
       <!-- Desktop Nav Links -->
       <nav class="desktop-nav" aria-label="Main Navigation">
-        <a href="#home" class="nav-link active" data-screen="home">Home</a>
-        <a href="#directory" class="nav-link" data-screen="directory">Find Artisans</a>
-        <a href="#my-jobs" class="nav-link" id="nav-link-my-jobs" data-screen="my-jobs">
+        <a href="#home" class="nav-link active" id="nav-link-home" data-screen="home">Home</a>
+        <a href="#directory" class="nav-link" id="nav-link-directory" data-screen="directory">Find Artisans</a>
+        <a href="#customer-dashboard" class="nav-link" id="nav-link-customer-dash" data-screen="customer-dashboard" style="display: none;">Customer Dashboard</a>
+        <a href="#artisan-dashboard" class="nav-link" id="nav-link-artisan-dash" data-screen="artisan-dashboard" style="display: none;">Artisan Dashboard</a>
+        <a href="#my-jobs" class="nav-link" id="nav-link-my-jobs" data-screen="my-jobs" style="display: none;">
           My Jobs <span class="nav-badge" id="nav-active-jobs-badge">1</span>
         </a>
-        <a href="#provider-dashboard" class="nav-link provider-only-link" id="nav-link-provider-dash" data-screen="provider-dashboard" style="display: none;">
-          Artisan Dashboard
-        </a>
-        <a href="#settings" class="nav-link" data-screen="settings">Settings</a>
+        <a href="#customer-profile" class="nav-link" id="nav-link-profile" data-screen="customer-profile" style="display: none;">My Profile</a>
+        <a href="#settings" class="nav-link" id="nav-link-settings" data-screen="settings" style="display: none;">Settings</a>
       </nav>
 
-      <!-- Role Switcher & User Meta -->
+      <!-- Role Switcher & Auth State Actions -->
       <div class="header-actions">
-        <button class="btn btn-secondary btn-sm role-toggle-btn" id="nav-role-switcher-btn" title="Toggle between Customer and Artisan view for demo">
-          Switch to Artisan Mode
-        </button>
+        <!-- Logged Out Buttons -->
+        <div class="nav-auth-group" id="nav-logged-out-group">
+          <a href="#login" class="btn btn-secondary btn-sm" id="nav-btn-login" data-screen="login">Log In</a>
+          <a href="#signup" class="btn btn-primary btn-sm" id="nav-btn-signup" data-screen="signup">Sign Up</a>
+        </div>
+
+        <!-- Logged In User Pill & Logout -->
+        <div class="nav-auth-group" id="nav-logged-in-group" style="display: none;">
+          <div class="nav-user-pill" id="nav-user-pill" title="Click to view profile">
+            <span class="user-pill-avatar" id="nav-user-pill-avatar">VD</span>
+            <div class="user-pill-text">
+              <span class="user-pill-name" id="nav-user-pill-name">Vivian Dike</span>
+              <span class="user-pill-id" id="nav-user-pill-id">KZ-CUS-000001</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="nav-btn-logout" onclick="KaziApp.handleLogout()" title="Log out of Kazi">
+            Log Out
+          </button>
+        </div>
+
         <button class="mobile-menu-btn" id="mobile-hamburger-btn" aria-label="Open menu">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
@@ -56,16 +73,187 @@
 
   <!-- Mobile Drawer Menu -->
   <div class="mobile-nav-drawer" id="mobile-nav-drawer">
-    <nav class="mobile-nav-links">
-      <a href="#home" class="mobile-nav-link" data-screen="home">🏠 Home</a>
-      <a href="#directory" class="mobile-nav-link" data-screen="directory">🔍 Find Artisans in Abuja</a>
-      <a href="#my-jobs" class="mobile-nav-link" data-screen="my-jobs">📋 My Jobs History</a>
-      <a href="#settings" class="mobile-nav-link" data-screen="settings">⚙️ Settings & Backup</a>
+    <nav class="mobile-nav-links" id="mobile-nav-links-container">
+      <!-- Populated dynamically by KaziApp.renderMobileNav() -->
     </nav>
   </div>
 
   <!-- ================= MAIN APPLICATION SCREENS ================= -->
   <main id="main-content">
+
+    <!-- 0A. LOGIN SCREEN -->
+    <section class="screen-section" id="screen-login">
+      <div class="container auth-page-container">
+        <div class="auth-card">
+          <div class="auth-header">
+            <span class="auth-icon-badge">⚡</span>
+            <h1 class="auth-title">Welcome back to Kazi</h1>
+            <p class="auth-subtitle">Log in to manage your jobs, access agreements, and view records</p>
+          </div>
+
+          <div class="alert alert-danger" id="login-error-alert" style="display: none;"></div>
+
+          <form id="login-form" class="auth-form">
+            <div class="form-group">
+              <label for="login-identifier-input" class="form-label">Email or Phone Number</label>
+              <input type="text" id="login-identifier-input" class="form-control" placeholder="e.g. customer@kazi.demo or 08031234567" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+              <label for="login-password-input" class="form-label">Password</label>
+              <input type="password" id="login-password-input" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg auth-submit-btn">
+              Log In
+            </button>
+          </form>
+
+          <!-- Demo Quick Fill Buttons -->
+          <div class="auth-demo-box">
+            <span class="auth-demo-title">Test Demo Accounts (1-Click Fill)</span>
+            <div class="demo-buttons-row">
+              <button type="button" class="btn btn-outline btn-sm demo-pill-btn" onclick="KaziApp.fillDemoCustomer()">
+                👤 Customer Demo (Vivian)
+              </button>
+              <button type="button" class="btn btn-outline btn-sm demo-pill-btn" onclick="KaziApp.fillDemoArtisan()">
+                🛠️ Artisan Demo (Chinedu)
+              </button>
+            </div>
+            <p class="demo-hint-text">Demo password is <code>demo123</code></p>
+          </div>
+
+          <div class="auth-footer-prompt">
+            <span>Don't have an account?</span>
+            <a href="#signup" class="auth-switch-link" data-screen="signup">Create one now →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 0B. SIGNUP SCREEN -->
+    <section class="screen-section" id="screen-signup">
+      <div class="container auth-page-container">
+        <div class="auth-card signup-card">
+          <div class="auth-header">
+            <span class="auth-icon-badge">✨</span>
+            <h1 class="auth-title">Create your Kazi account</h1>
+            <p class="auth-subtitle">Join Abuja's trusted local services network with your permanent Kazi ID</p>
+          </div>
+
+          <!-- Account Type / Role Selector -->
+          <div class="role-selector-block">
+            <label class="form-label">I am registering as:</label>
+            <div class="role-toggle-group">
+              <button type="button" class="role-choice-btn active" id="signup-role-cus" onclick="KaziApp.setSignupRole('customer')">
+                <span class="role-icon">👤</span>
+                <span class="role-title">Customer</span>
+                <span class="role-desc">I want to hire reliable service providers</span>
+              </button>
+              <button type="button" class="role-choice-btn" id="signup-role-art" onclick="KaziApp.setSignupRole('artisan')">
+                <span class="role-icon">🛠️</span>
+                <span class="role-title">Artisan / Service Provider</span>
+                <span class="role-desc">I want to provide skilled trade services</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="alert alert-danger" id="signup-error-alert" style="display: none;"></div>
+
+          <form id="signup-form" class="auth-form">
+            <!-- Common Fields -->
+            <div class="form-group">
+              <label for="signup-name-input" class="form-label">Full Name</label>
+              <input type="text" id="signup-name-input" class="form-control" placeholder="e.g. Vivian Dike" required>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="signup-email-input" class="form-label">Email Address</label>
+                <input type="email" id="signup-email-input" class="form-control" placeholder="name@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="signup-phone-input" class="form-label">Phone Number</label>
+                <input type="tel" id="signup-phone-input" class="form-control" placeholder="0803 123 4567" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-city-input" class="form-label">City / Territory</label>
+              <input type="text" id="signup-city-input" class="form-control" value="Abuja" required>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="signup-password-input" class="form-label">Password</label>
+                <input type="password" id="signup-password-input" class="form-control" placeholder="At least 6 characters" required>
+              </div>
+              <div class="form-group">
+                <label for="signup-confirm-password-input" class="form-label">Confirm Password</label>
+                <input type="password" id="signup-confirm-password-input" class="form-control" placeholder="Re-enter password" required>
+              </div>
+            </div>
+
+            <!-- Artisan-Specific Professional Fields (Hidden for Customer) -->
+            <div id="signup-artisan-fields" class="artisan-extra-fields" style="display: none;">
+              <div class="artisan-fields-divider">
+                <span>Professional Trade Information</span>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="signup-primary-service-select" class="form-label">Primary Service Category</label>
+                  <select id="signup-primary-service-select" class="form-control">
+                    <option value="Electrician">Electrician</option>
+                    <option value="Plumber">Plumber</option>
+                    <option value="Mechanic">Mechanic</option>
+                    <option value="Tailor">Tailor</option>
+                    <option value="Cleaner">Cleaner</option>
+                    <option value="Barber">Barber</option>
+                    <option value="AC Technician">AC Technician</option>
+                    <option value="Painter">Painter</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="signup-experience-input" class="form-label">Years of Experience</label>
+                  <input type="number" id="signup-experience-input" class="form-control" min="1" max="40" value="5">
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="signup-price-min-input" class="form-label">Typical Min Price (₦)</label>
+                  <input type="number" id="signup-price-min-input" class="form-control" placeholder="15000" step="1000">
+                </div>
+                <div class="form-group">
+                  <label for="signup-price-max-input" class="form-label">Typical Max Price (₦)</label>
+                  <input type="number" id="signup-price-max-input" class="form-control" placeholder="40000" step="1000">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="signup-areas-input" class="form-label">Service Areas in Abuja (comma-separated)</label>
+                <input type="text" id="signup-areas-input" class="form-control" placeholder="Wuse II, Maitama, Garki, Jabi">
+              </div>
+
+              <div class="form-group">
+                <label for="signup-bio-input" class="form-label">Short Professional Bio</label>
+                <textarea id="signup-bio-input" class="form-control" rows="2" placeholder="Briefly describe your specialization, reliability, and work approach..."></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg auth-submit-btn">
+              Create Account
+            </button>
+          </form>
+
+          <div class="auth-footer-prompt">
+            <span>Already have an account?</span>
+            <a href="#login" class="auth-switch-link" data-screen="login">Log In instead →</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- 1. HOME SCREEN -->
     <section class="screen-section screen-active" id="screen-home">
@@ -311,10 +499,210 @@
       </div>
     </section>
 
-    <!-- 5. PROVIDER DASHBOARD (Artisan View) -->
-    <section class="screen-section" id="screen-provider-dashboard">
-      <div class="container" id="provider-dashboard-content">
-        <!-- Rendered by js/app.js for Chinedu Okafor -->
+    <!-- 4B. CUSTOMER DASHBOARD SCREEN -->
+    <section class="screen-section" id="screen-customer-dashboard">
+      <div class="container customer-dashboard-container" id="customer-dashboard-content">
+        <!-- Rendered dynamically by KaziApp.renderCustomerDashboard() -->
+      </div>
+    </section>
+
+    <!-- 4C. CUSTOMER PROFILE SCREEN -->
+    <section class="screen-section" id="screen-customer-profile">
+      <div class="container profile-page-container">
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar-large" id="cus-profile-avatar" style="background-color: #047857;">VD</div>
+            </div>
+            <div class="profile-header-meta">
+              <h1 class="profile-title" id="cus-profile-header-name">Vivian Dike</h1>
+              <div class="profile-badge-row">
+                <span class="badge-kazi-id badge-kazi-id-cus">
+                  <span class="kazi-id-label">PERMANENT KAZI ID:</span>
+                  <strong id="cus-profile-kazi-id">KZ-CUS-000001</strong>
+                </span>
+                <span class="profile-role-tag">Customer Account</span>
+              </div>
+              <p class="profile-note">Your Kazi ID is permanent and attached to all your agreed jobs and verified reviews.</p>
+            </div>
+          </div>
+
+          <form id="customer-profile-form" class="profile-edit-form">
+            <h3 class="form-section-title">Personal & Contact Details</h3>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="cus-profile-name-input" class="form-label">Full Name</label>
+                <input type="text" id="cus-profile-name-input" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="cus-profile-city-input" class="form-label">City</label>
+                <input type="text" id="cus-profile-city-input" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="cus-profile-email-input" class="form-label">Email Address</label>
+                <input type="email" id="cus-profile-email-input" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="cus-profile-phone-input" class="form-label">Phone Number</label>
+                <input type="tel" id="cus-profile-phone-input" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cus-profile-address-input" class="form-label">Delivery Address / Landmark (Optional)</label>
+              <input type="text" id="cus-profile-address-input" class="form-control" placeholder="e.g. 14 Adetokunbo Ademola Crescent, Wuse II, Abuja">
+            </div>
+
+            <div class="form-group">
+              <label for="cus-profile-contact-select" class="form-label">Preferred Contact Method</label>
+              <select id="cus-profile-contact-select" class="form-control">
+                <option value="Phone">Phone Call</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Email">Email</option>
+              </select>
+            </div>
+
+            <div class="profile-form-actions">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Save Profile Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ARTISAN DASHBOARD SCREEN -->
+    <section class="screen-section" id="screen-artisan-dashboard">
+      <div class="container" id="artisan-dashboard-content">
+        <!-- Rendered dynamically by KaziApp.renderArtisanDashboard() -->
+      </div>
+    </section>
+
+    <!-- 5B. ARTISAN PROFILE SCREEN -->
+    <section class="screen-section" id="screen-artisan-profile">
+      <div class="container profile-page-container">
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar-large" id="art-profile-avatar" style="background-color: #0f766e;">CO</div>
+            </div>
+            <div class="profile-header-meta">
+              <h1 class="profile-title" id="art-profile-header-name">Chinedu Okafor</h1>
+              <div class="profile-badge-row">
+                <span class="badge-kazi-id badge-kazi-id-art">
+                  <span class="kazi-id-label">PERMANENT KAZI ID:</span>
+                  <strong id="art-profile-kazi-id">KZ-ART-000001</strong>
+                </span>
+                <span class="profile-role-tag" id="art-profile-header-trade">Electrician</span>
+              </div>
+              <p class="profile-note">Your professional profile is visible to customers across Abuja on the public directory.</p>
+            </div>
+          </div>
+
+          <form id="artisan-profile-form" class="profile-edit-form">
+            <!-- Private Account Information -->
+            <div class="profile-form-section">
+              <h3 class="form-section-title">Personal & Private Contact Info</h3>
+              <p class="form-section-desc">Kept secure on your private account.</p>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="art-profile-name-input" class="form-label">Full Name</label>
+                  <input type="text" id="art-profile-name-input" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="art-profile-city-input" class="form-label">Base City</label>
+                  <input type="text" id="art-profile-city-input" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="art-profile-email-input" class="form-label">Email Address</label>
+                  <input type="email" id="art-profile-email-input" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="art-profile-phone-input" class="form-label">Phone Number</label>
+                  <input type="tel" id="art-profile-phone-input" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Public Professional Information -->
+            <div class="profile-form-section">
+              <h3 class="form-section-title">Public Professional Profile</h3>
+              <p class="form-section-desc">Displayed on the public Kazi directory for customers looking to hire you.</p>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="art-profile-trade-select" class="form-label">Primary Trade</label>
+                  <select id="art-profile-trade-select" class="form-control">
+                    <option value="Electrician">Electrician</option>
+                    <option value="Plumber">Plumber</option>
+                    <option value="Mechanic">Mechanic</option>
+                    <option value="Tailor">Tailor</option>
+                    <option value="Cleaner">Cleaner</option>
+                    <option value="Barber">Barber</option>
+                    <option value="AC Technician">AC Technician</option>
+                    <option value="Painter">Painter</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="art-profile-exp-input" class="form-label">Years of Experience</label>
+                  <input type="number" id="art-profile-exp-input" class="form-control" min="1" max="50" required>
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="art-profile-avail-select" class="form-label">Current Availability</label>
+                  <select id="art-profile-avail-select" class="form-control">
+                    <option value="Available Today">Available Today</option>
+                    <option value="Available Tomorrow">Available Tomorrow</option>
+                    <option value="Available Next Week">Available Next Week</option>
+                    <option value="Busy / Fully Booked">Busy / Fully Booked</option>
+                  </select>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="art-profile-min-price-input" class="form-label">Typical Min (₦)</label>
+                    <input type="number" id="art-profile-min-price-input" class="form-control" step="1000" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="art-profile-max-price-input" class="form-label">Typical Max (₦)</label>
+                    <input type="number" id="art-profile-max-price-input" class="form-control" step="1000" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="art-profile-areas-input" class="form-label">Service Areas (comma-separated)</label>
+                <input type="text" id="art-profile-areas-input" class="form-control" placeholder="Wuse II, Maitama, Garki, Jabi" required>
+              </div>
+
+              <div class="form-group">
+                <label for="art-profile-services-input" class="form-label">Services Offered (comma-separated)</label>
+                <input type="text" id="art-profile-services-input" class="form-control" placeholder="Electrical repairs, House wiring, Inverter installation" required>
+              </div>
+
+              <div class="form-group">
+                <label for="art-profile-bio-input" class="form-label">About / Bio</label>
+                <textarea id="art-profile-bio-input" class="form-control" rows="3" placeholder="Describe your experience and work ethic..." required></textarea>
+              </div>
+            </div>
+
+            <div class="profile-form-actions">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Save Professional Profile
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -352,21 +740,23 @@
             </div>
           </div>
 
-          <!-- Demo Persona Switcher -->
+          <!-- Active Account & Persona Card -->
           <div class="settings-card">
             <div class="settings-card-header">
               <span class="settings-icon">👤</span>
               <div>
-                <h3 class="settings-title">Active Persona / User Role</h3>
-                <p class="settings-desc">Simulate both sides of the Kazi marketplace without backend credentials.</p>
+                <h3 class="settings-title">Active Account & Session</h3>
+                <p class="settings-desc">Current authenticated user session in this browser.</p>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="settings-role-select" class="filter-label">Switch Active Persona</label>
+            <div id="settings-current-user-info" class="settings-user-info-wrap"></div>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label for="settings-role-select" class="filter-label">Quick Switch Demo Persona</label>
               <select id="settings-role-select" class="filter-select">
-                <option value="customer">Customer: Funke Adeyemi (Wuse II, Abuja)</option>
-                <option value="provider">Provider: Chinedu Okafor (Electrician · Wuse II)</option>
+                <option value="customer">Customer: Vivian Dike (KZ-CUS-000001 · Wuse II)</option>
+                <option value="provider">Artisan: Chinedu Okafor (KZ-ART-000001 · Electrician)</option>
               </select>
             </div>
           </div>

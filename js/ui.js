@@ -194,6 +194,16 @@ const KaziUI = (function() {
     });
   }
 
+  /**
+   * Renders permanent Kazi ID pill badge
+   */
+  function renderKaziIdBadge(kaziId, role = 'customer') {
+    if (!kaziId) return '';
+    const isArtisan = role === 'artisan' || (typeof kaziId === 'string' && kaziId.startsWith('KZ-ART'));
+    const badgeClass = isArtisan ? 'badge-kazi-id-art' : 'badge-kazi-id-cus';
+    return `<span class="badge-kazi-id ${badgeClass}" title="Permanent Kazi ID: ${kaziId}"><span class="kazi-id-label">${isArtisan ? 'ARTISAN' : 'CUSTOMER'} ID:</span> <strong>${kaziId}</strong></span>`;
+  }
+
   return {
     formatNaira,
     formatDate,
@@ -202,6 +212,8 @@ const KaziUI = (function() {
     toast,
     openModal,
     closeModal,
-    initModalDismissHandlers
+    initModalDismissHandlers,
+    renderKaziIdBadge
   };
 })();
+

@@ -1,6 +1,7 @@
 /**
  * KAZI - Seed Data for Abuja, Nigeria
  * Contains 24+ realistic service providers, categories, initial jobs, reviews, and demo users.
+ * All users & artisans are assigned permanent, unique Kazi IDs (KZ-CUS-* / KZ-ART-*).
  */
 
 const KAZI_SEED_DATA = {
@@ -21,38 +22,67 @@ const KAZI_SEED_DATA = {
     { id: 'painter', name: 'Painter', icon: 'pen-tool', count: 2, description: 'Interior/exterior screeding, decorative painting & stucco finish' }
   ],
 
+  // Registered demo users
   users: [
+    // Primary Customer Demo
     {
       id: 'usr_customer_01',
-      name: 'Funke Adeyemi',
-      phone: '+234 803 555 0192',
-      email: 'funke.adeyemi@kazi.ng',
-      city: 'Abuja',
-      area: 'Wuse II',
+      kaziId: 'KZ-CUS-000001',
       role: 'customer',
+      fullName: 'Vivian Dike',
+      email: 'customer@kazi.demo',
+      phone: '+234 803 555 0192',
+      password: 'demo123',
+      city: 'Abuja',
+      address: 'Plot 42, Aminu Kano Crescent, Wuse II',
+      preferredContact: 'Phone',
       avatarBg: '#047857',
-      initials: 'FA',
-      createdAt: '2026-08-10T09:00:00.000Z'
+      initials: 'VD',
+      createdAt: '2026-08-10T09:00:00.000Z',
+      updatedAt: '2026-10-02T04:00:00.000Z'
     },
+    // Primary Artisan Demo (Chinedu Okafor)
     {
       id: 'usr_provider_01',
-      name: 'Chinedu Okafor',
-      phone: '+234 802 333 4411',
-      email: 'chinedu.electrician@kazi.ng',
-      city: 'Abuja',
-      area: 'Wuse II',
-      role: 'provider',
+      kaziId: 'KZ-ART-000001',
+      role: 'artisan',
       providerId: 'prv_001',
-      avatarBg: '#1e3a8a',
+      fullName: 'Chinedu Okafor',
+      email: 'artisan@kazi.demo',
+      phone: '+234 802 333 4411',
+      password: 'demo123',
+      city: 'Abuja',
+      primaryService: 'Electrician',
+      services: [
+        'Distribution Board Upgrades',
+        'Inverter & Solar System Setup',
+        'Fault Finding & Circuit Tripping',
+        'House Conduit & Surface Wiring',
+        'Generator Changeover Installation'
+      ],
+      serviceAreas: ['Wuse II', 'Maitama', 'Garki', 'Jabi', 'Utako'],
+      bio: 'Licensed electrical technician with over 9 years of hands-on experience in residential and commercial buildings across Abuja. Specializes in distribution board upgrades, inverter setup, and electrical troubleshooting.',
+      yearsOfExperience: 9,
+      typicalPriceMin: 25000,
+      typicalPriceMax: 40000,
+      availability: 'Available Today',
+      rating: 4.8,
+      completedJobs: 47,
+      verifiedReviews: 39,
+      isVerifiedIdentity: true,
+      avatarBg: '#0f766e',
       initials: 'CO',
-      createdAt: '2026-01-12T11:00:00.000Z'
+      createdAt: '2026-01-12T11:00:00.000Z',
+      updatedAt: '2026-10-02T04:00:00.000Z'
     }
   ],
 
+  // 24 Detailed Abuja Providers (all mapped to permanent KZ-ART-* IDs)
   providers: [
     // --- 5 ELECTRICIANS ---
     {
       id: 'prv_001',
+      kaziId: 'KZ-ART-000001',
       userId: 'usr_provider_01',
       name: 'Chinedu Okafor',
       category: 'Electrician',
@@ -63,6 +93,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 47,
       verifiedReviews: 39,
+      yearsOfExperience: 9,
       typicalPriceMin: 25000,
       typicalPriceMax: 40000,
       availability: 'Available Today',
@@ -80,6 +111,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_002',
+      kaziId: 'KZ-ART-000002',
       userId: 'usr_p02',
       name: 'Tunde Bakare',
       category: 'Electrician',
@@ -90,6 +122,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 34,
       verifiedReviews: 28,
+      yearsOfExperience: 7,
       typicalPriceMin: 20000,
       typicalPriceMax: 35000,
       availability: 'Available Tomorrow',
@@ -106,6 +139,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_003',
+      kaziId: 'KZ-ART-000003',
       userId: 'usr_p03',
       name: 'Ibrahim Musa',
       category: 'Electrician',
@@ -116,6 +150,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 52,
       verifiedReviews: 46,
+      yearsOfExperience: 10,
       typicalPriceMin: 30000,
       typicalPriceMax: 55000,
       availability: 'Available Today',
@@ -132,6 +167,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_004',
+      kaziId: 'KZ-ART-000004',
       userId: 'usr_p04',
       name: 'Emeka Nwosu',
       category: 'Electrician',
@@ -142,6 +178,7 @@ const KAZI_SEED_DATA = {
       rating: 4.6,
       completedJobs: 29,
       verifiedReviews: 22,
+      yearsOfExperience: 6,
       typicalPriceMin: 18000,
       typicalPriceMax: 32000,
       availability: 'Available Today',
@@ -158,6 +195,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_005',
+      kaziId: 'KZ-ART-000005',
       userId: 'usr_p05',
       name: 'Sunday Adeleke',
       category: 'Electrician',
@@ -168,6 +206,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 41,
       verifiedReviews: 35,
+      yearsOfExperience: 8,
       typicalPriceMin: 22000,
       typicalPriceMax: 38000,
       availability: 'Available Tomorrow',
@@ -186,6 +225,7 @@ const KAZI_SEED_DATA = {
     // --- 5 PLUMBERS ---
     {
       id: 'prv_006',
+      kaziId: 'KZ-ART-000006',
       userId: 'usr_p06',
       name: 'Emeka Eze',
       category: 'Plumber',
@@ -196,6 +236,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 58,
       verifiedReviews: 50,
+      yearsOfExperience: 11,
       typicalPriceMin: 15000,
       typicalPriceMax: 30000,
       availability: 'Available Today',
@@ -213,6 +254,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_007',
+      kaziId: 'KZ-ART-000007',
       userId: 'usr_p07',
       name: 'Usman Garba',
       category: 'Plumber',
@@ -223,6 +265,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 31,
       verifiedReviews: 26,
+      yearsOfExperience: 7,
       typicalPriceMin: 18000,
       typicalPriceMax: 35000,
       availability: 'Available Today',
@@ -239,6 +282,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_008',
+      kaziId: 'KZ-ART-000008',
       userId: 'usr_p08',
       name: 'Babatunde Alabi',
       category: 'Plumber',
@@ -249,6 +293,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 44,
       verifiedReviews: 37,
+      yearsOfExperience: 9,
       typicalPriceMin: 20000,
       typicalPriceMax: 40000,
       availability: 'Available Tomorrow',
@@ -265,6 +310,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_009',
+      kaziId: 'KZ-ART-000009',
       userId: 'usr_p09',
       name: 'Jude Okeke',
       category: 'Plumber',
@@ -275,6 +321,7 @@ const KAZI_SEED_DATA = {
       rating: 4.6,
       completedJobs: 27,
       verifiedReviews: 21,
+      yearsOfExperience: 5,
       typicalPriceMin: 15000,
       typicalPriceMax: 28000,
       availability: 'Available Today',
@@ -291,6 +338,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_010',
+      kaziId: 'KZ-ART-000010',
       userId: 'usr_p10',
       name: 'Mohammed Bello',
       category: 'Plumber',
@@ -301,6 +349,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 36,
       verifiedReviews: 30,
+      yearsOfExperience: 8,
       typicalPriceMin: 12000,
       typicalPriceMax: 25000,
       availability: 'Available Today',
@@ -319,6 +368,7 @@ const KAZI_SEED_DATA = {
     // --- 5 MECHANICS ---
     {
       id: 'prv_011',
+      kaziId: 'KZ-ART-000011',
       userId: 'usr_p11',
       name: 'Kelechi Amadi',
       category: 'Mechanic',
@@ -329,6 +379,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 62,
       verifiedReviews: 54,
+      yearsOfExperience: 14,
       typicalPriceMin: 25000,
       typicalPriceMax: 60000,
       availability: 'Available Today',
@@ -346,6 +397,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_012',
+      kaziId: 'KZ-ART-000012',
       userId: 'usr_p12',
       name: 'Yakubu Danladi',
       category: 'Mechanic',
@@ -356,6 +408,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 39,
       verifiedReviews: 33,
+      yearsOfExperience: 9,
       typicalPriceMin: 20000,
       typicalPriceMax: 50000,
       availability: 'Available Tomorrow',
@@ -372,6 +425,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_013',
+      kaziId: 'KZ-ART-000013',
       userId: 'usr_p13',
       name: 'Rasheed Sanusi',
       category: 'Mechanic',
@@ -382,6 +436,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 48,
       verifiedReviews: 42,
+      yearsOfExperience: 12,
       typicalPriceMin: 25000,
       typicalPriceMax: 55000,
       availability: 'Available Today',
@@ -398,6 +453,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_014',
+      kaziId: 'KZ-ART-000014',
       userId: 'usr_p14',
       name: 'Kenneth Obi',
       category: 'Mechanic',
@@ -408,6 +464,7 @@ const KAZI_SEED_DATA = {
       rating: 4.6,
       completedJobs: 30,
       verifiedReviews: 24,
+      yearsOfExperience: 6,
       typicalPriceMin: 18000,
       typicalPriceMax: 45000,
       availability: 'Available Today',
@@ -424,6 +481,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_015',
+      kaziId: 'KZ-ART-000015',
       userId: 'usr_p15',
       name: 'Samuel Olatunji',
       category: 'Mechanic',
@@ -434,6 +492,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 35,
       verifiedReviews: 29,
+      yearsOfExperience: 8,
       typicalPriceMin: 20000,
       typicalPriceMax: 48000,
       availability: 'Available Tomorrow',
@@ -452,6 +511,7 @@ const KAZI_SEED_DATA = {
     // --- 3 TAILORS ---
     {
       id: 'prv_016',
+      kaziId: 'KZ-ART-000016',
       userId: 'usr_p16',
       name: 'Amina Bello',
       category: 'Tailor',
@@ -462,6 +522,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 56,
       verifiedReviews: 49,
+      yearsOfExperience: 11,
       typicalPriceMin: 15000,
       typicalPriceMax: 45000,
       availability: 'Available Today',
@@ -478,6 +539,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_017',
+      kaziId: 'KZ-ART-000017',
       userId: 'usr_p17',
       name: 'Hadiza Yusuf',
       category: 'Tailor',
@@ -488,6 +550,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 43,
       verifiedReviews: 38,
+      yearsOfExperience: 9,
       typicalPriceMin: 20000,
       typicalPriceMax: 60000,
       availability: 'Available Tomorrow',
@@ -504,6 +567,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_018',
+      kaziId: 'KZ-ART-000018',
       userId: 'usr_p18',
       name: 'Blessing Okon',
       category: 'Tailor',
@@ -514,6 +578,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 32,
       verifiedReviews: 27,
+      yearsOfExperience: 7,
       typicalPriceMin: 12000,
       typicalPriceMax: 35000,
       availability: 'Available Today',
@@ -532,6 +597,7 @@ const KAZI_SEED_DATA = {
     // --- 3 CLEANERS ---
     {
       id: 'prv_019',
+      kaziId: 'KZ-ART-000019',
       userId: 'usr_p19',
       name: 'Fatima Mohammed',
       category: 'Cleaner',
@@ -542,6 +608,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 49,
       verifiedReviews: 42,
+      yearsOfExperience: 8,
       typicalPriceMin: 15000,
       typicalPriceMax: 35000,
       availability: 'Available Today',
@@ -558,6 +625,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_020',
+      kaziId: 'KZ-ART-000020',
       userId: 'usr_p20',
       name: 'Ngozi Eze',
       category: 'Cleaner',
@@ -568,6 +636,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 64,
       verifiedReviews: 57,
+      yearsOfExperience: 6,
       typicalPriceMin: 18000,
       typicalPriceMax: 40000,
       availability: 'Available Today',
@@ -584,6 +653,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_021',
+      kaziId: 'KZ-ART-000021',
       userId: 'usr_p21',
       name: 'Grace Danjuma',
       category: 'Cleaner',
@@ -594,6 +664,7 @@ const KAZI_SEED_DATA = {
       rating: 4.7,
       completedJobs: 38,
       verifiedReviews: 31,
+      yearsOfExperience: 7,
       typicalPriceMin: 20000,
       typicalPriceMax: 45000,
       availability: 'Available Tomorrow',
@@ -612,6 +683,7 @@ const KAZI_SEED_DATA = {
     // --- 3 BARBERS ---
     {
       id: 'prv_022',
+      kaziId: 'KZ-ART-000022',
       userId: 'usr_p22',
       name: 'Tayo Adeyemi',
       category: 'Barber',
@@ -622,6 +694,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 71,
       verifiedReviews: 65,
+      yearsOfExperience: 10,
       typicalPriceMin: 5000,
       typicalPriceMax: 15000,
       availability: 'Available Today',
@@ -638,6 +711,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_023',
+      kaziId: 'KZ-ART-000023',
       userId: 'usr_p23',
       name: 'Collins Igwe',
       category: 'Barber',
@@ -648,6 +722,7 @@ const KAZI_SEED_DATA = {
       rating: 4.8,
       completedJobs: 53,
       verifiedReviews: 46,
+      yearsOfExperience: 8,
       typicalPriceMin: 4000,
       typicalPriceMax: 12000,
       availability: 'Available Today',
@@ -664,6 +739,7 @@ const KAZI_SEED_DATA = {
     },
     {
       id: 'prv_024',
+      kaziId: 'KZ-ART-000024',
       userId: 'usr_p24',
       name: 'Ahmed Sani',
       category: 'Barber',
@@ -674,6 +750,7 @@ const KAZI_SEED_DATA = {
       rating: 4.9,
       completedJobs: 60,
       verifiedReviews: 52,
+      yearsOfExperience: 9,
       typicalPriceMin: 6000,
       typicalPriceMax: 18000,
       availability: 'Available Tomorrow',
@@ -690,14 +767,17 @@ const KAZI_SEED_DATA = {
     }
   ],
 
+  // Sample jobs demonstrating active, awaiting review, and issue states
   jobs: [
-    // Pre-populated active job matching the spec:
+    // 1. Active Job: In Progress with Chinedu Okafor (Electrician)
     {
       id: 'job_001',
       customerId: 'usr_customer_01',
-      customerName: 'Funke Adeyemi',
+      customerName: 'Vivian Dike',
+      customerKaziId: 'KZ-CUS-000001',
       providerId: 'prv_001',
       providerName: 'Chinedu Okafor',
+      providerKaziId: 'KZ-ART-000001',
       category: 'Electrician',
       serviceName: 'Distribution Board Upgrades',
       description: 'Breaker board tripping frequently whenever generator switch is flipped. Inspect main conduit connection and install 63A surge isolator.',
@@ -709,13 +789,35 @@ const KAZI_SEED_DATA = {
       createdAt: '2026-10-01T10:15:00.000Z',
       completedAt: null
     },
-    // Pre-populated completed job:
+    // 2. Active Job: Agreed / Scheduled with Amina Bello (Tailor)
     {
       id: 'job_002',
       customerId: 'usr_customer_01',
-      customerName: 'Funke Adeyemi',
+      customerName: 'Vivian Dike',
+      customerKaziId: 'KZ-CUS-000001',
+      providerId: 'prv_016',
+      providerName: 'Amina Bello',
+      providerKaziId: 'KZ-ART-000016',
+      category: 'Tailor',
+      serviceName: 'Men’s Bespoke Senator & Kaftan',
+      description: 'Two pairs of bespoke corporate Senator attire. Fabrics supplied by customer. Measurements on file.',
+      agreedPrice: 28000,
+      agreedDate: '2026-10-06',
+      status: 'agreed',
+      notes: 'Delivery expected before Friday event.',
+      issue: null,
+      createdAt: '2026-10-01T16:00:00.000Z',
+      completedAt: null
+    },
+    // 3. Completed Job: Awaiting Customer Review! with Emeka Eze (Plumber)
+    {
+      id: 'job_003',
+      customerId: 'usr_customer_01',
+      customerName: 'Vivian Dike',
+      customerKaziId: 'KZ-CUS-000001',
       providerId: 'prv_006',
       providerName: 'Emeka Eze',
+      providerKaziId: 'KZ-ART-000006',
       category: 'Plumber',
       serviceName: 'Borehole & Pressure Pump Repair',
       description: 'Submersible water pump was making grinding sound and stopping every 10 minutes. Cleaned foot valve and replaced pressure capacitor.',
@@ -727,13 +829,15 @@ const KAZI_SEED_DATA = {
       createdAt: '2026-09-27T08:00:00.000Z',
       completedAt: '2026-09-28T16:30:00.000Z'
     },
-    // Pre-populated issue reported job:
+    // 4. Issue Reported Job with Usman Garba
     {
-      id: 'job_003',
+      id: 'job_004',
       customerId: 'usr_customer_01',
-      customerName: 'Funke Adeyemi',
+      customerName: 'Vivian Dike',
+      customerKaziId: 'KZ-CUS-000001',
       providerId: 'prv_007',
       providerName: 'Usman Garba',
+      providerKaziId: 'KZ-ART-000007',
       category: 'Plumber',
       serviceName: 'Concealed Pipe Leak Detection',
       description: 'Leak inside guest bathroom wall causing dampness. Required leak detection and pipe sealing.',
@@ -744,21 +848,23 @@ const KAZI_SEED_DATA = {
       issue: {
         type: 'Price Changed on Site',
         reportedAt: '2026-09-20T15:45:00.000Z',
-        reportedBy: 'Funke Adeyemi',
-        customerNote: 'Artisan broke the tiles and then demanded an additional ₦25,000 for materials before continuing work, despite our initial agreement of ₦45,000.'
+        reportedBy: 'Vivian Dike',
+        customerNote: 'Artisan dismantled tiles and demanded an additional ₦25,000 for materials despite initial agreement of ₦45,000.'
       },
       createdAt: '2026-09-19T14:00:00.000Z',
       completedAt: null
     }
   ],
 
+  // Verified Reviews attached exclusively to completed Kazi job records
   reviews: [
-    // Reviews for Chinedu Okafor (prv_001)
+    // Verified reviews for Chinedu Okafor (prv_001)
     {
       id: 'rev_001',
       jobId: 'job_hist_01',
       customerId: 'usr_c02',
       customerName: 'Dr. Aliyu Mohammed',
+      customerKaziId: 'KZ-CUS-000002',
       providerId: 'prv_001',
       rating: 5,
       reviewText: 'Chinedu came to my residence in Maitama. Diagnosed the inverter fault in 20 minutes. He stuck to the agreed price without demanding any extra fees. Highly recommended!',
@@ -773,6 +879,7 @@ const KAZI_SEED_DATA = {
       jobId: 'job_hist_02',
       customerId: 'usr_c03',
       customerName: 'Kemi Balogun',
+      customerKaziId: 'KZ-CUS-000003',
       providerId: 'prv_001',
       rating: 5,
       reviewText: 'Fixed our office distribution board in Wuse II after two other electricians failed. Very professional demeanor and came with his complete toolkit.',
@@ -787,6 +894,7 @@ const KAZI_SEED_DATA = {
       jobId: 'job_hist_03',
       customerId: 'usr_c04',
       customerName: 'Emeka Nwachukwu',
+      customerKaziId: 'KZ-CUS-000004',
       providerId: 'prv_001',
       rating: 4,
       reviewText: 'Good work on the changeover switch. Arrived about 25 minutes past the agreed time due to traffic around Berger roundabout, but communicated proactively and did solid work.',
@@ -796,27 +904,13 @@ const KAZI_SEED_DATA = {
       createdAt: '2026-08-30T17:15:00.000Z',
       verified: true
     },
-    // Review for Emeka Eze (job_002)
-    {
-      id: 'rev_004',
-      jobId: 'job_002',
-      customerId: 'usr_customer_01',
-      customerName: 'Funke Adeyemi',
-      providerId: 'prv_006',
-      rating: 5,
-      reviewText: 'Emeka arrived right on schedule at 10 AM. He brought all the necessary pipe fittings and sorted out our borehole pump cleanly. The agreed ₦18,000 price was strictly respected.',
-      arrivedAsAgreed: true,
-      priceAsAgreed: true,
-      jobCompleted: true,
-      createdAt: '2026-09-28T17:00:00.000Z',
-      verified: true
-    },
     // Review for Kelechi Amadi (prv_011)
     {
-      id: 'rev_005',
+      id: 'rev_004',
       jobId: 'job_hist_04',
       customerId: 'usr_c05',
       customerName: 'Sadiq Abubakar',
+      customerKaziId: 'KZ-CUS-000005',
       providerId: 'prv_011',
       rating: 5,
       reviewText: 'Kelechi scanned my Toyota Prado and located a faulty wheel speed sensor that was triggering the ABS warning. Transparent quote, genuine part, zero guesswork.',
@@ -828,10 +922,11 @@ const KAZI_SEED_DATA = {
     },
     // Review for Amina Bello (prv_016)
     {
-      id: 'rev_006',
+      id: 'rev_005',
       jobId: 'job_hist_05',
       customerId: 'usr_c06',
       customerName: 'Zainab Okoye',
+      customerKaziId: 'KZ-CUS-000006',
       providerId: 'prv_016',
       rating: 5,
       reviewText: 'Amina delivered my bespoke Senator outfit 2 days ahead of my brother’s traditional wedding. Flawless stitching and premium finishing. She is now my permanent tailor.',

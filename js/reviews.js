@@ -112,7 +112,8 @@ const KaziReviews = (function() {
     const reviewRecord = {
       jobId: jobId,
       customerId: currentUser?.id || 'usr_customer_01',
-      customerName: currentUser?.name || 'Funke Adeyemi',
+      customerName: currentUser?.fullName || 'Vivian Dike',
+      customerKaziId: currentUser?.kaziId || 'KZ-CUS-000001',
       providerId: providerId,
       rating: selectedRating,
       reviewText: reviewText,

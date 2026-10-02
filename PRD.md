@@ -431,3 +431,77 @@ The MVP is complete when the following end-to-end user verification scenario exe
 11. Verify the review immediately appears on Chinedu's profile, updating his review count and rating.
 12. Refresh browser → confirm all data persists.
 13. Export JSON backup → clear data → Import JSON backup → confirm complete data restoration.
+
+---
+
+## 26. Authentication, User Profiles & Unique Kazi IDs (MVP Specification)
+
+### 26.1 Authentication Architecture (Frontend MVP LocalStorage)
+- **Zero Backend Constraint:** Authentication is implemented as an offline client-side system using LocalStorage. It serves as an MVP prototype for user identity and role simulation.
+- **Session State:** Stored under key `kazi_active_user_id`. When logged in, this points to a valid user `id` in `kazi_users`. When logged out, the key is removed.
+- **Sign Up Flow:**
+  - Role selection: **Customer** or **Artisan / Service Provider**.
+  - Common fields: `fullName`, `email`, `phone`, `city` (default Abuja), `password`, `confirmPassword`.
+  - Artisan additional fields: `primaryService`, `yearsOfExperience`, `typicalPriceMin`, `typicalPriceMax`, `serviceAreas`, `bio`.
+  - Validates duplicate email/phone and password matching.
+  - Automatically signs in and navigates to the respective dashboard.
+- **Login Flow:**
+  - Accepts registered email or phone with password.
+  - Validates credentials against `kazi_users`.
+  - 1-click Demo Quick Fill buttons provided for rapid testing:
+    - Customer Demo: `customer@kazi.demo` / `demo123` (Vivian Dike)
+    - Artisan Demo: `artisan@kazi.demo` / `demo123` (Chinedu Okafor)
+- **Logout Flow:**
+  - Clears `kazi_active_user_id` and redirects to the landing page (`#home`).
+
+### 26.2 Permanent Unique Kazi ID System
+Every registered user receives a permanent, immutable Kazi ID upon account creation:
+- **Customer Format:** `KZ-CUS-000001`, `KZ-CUS-000002`, ...
+- **Artisan Format:** `KZ-ART-000001`, `KZ-ART-000002`, ..., `KZ-ART-000024`, ...
+- **Immutability Guarantee:** The numerical ID is generated once and is never altered when a user edits their name, phone, email, or trade profile.
+- **Persistence & Anti-Reuse:** An ID registry key `kazi_id_registry` tracks all issued IDs alongside persistent counters (`kazi_counter_cus`, `kazi_counter_art`) to guarantee that IDs cannot be reused if an account is deleted.
+
+### 26.3 Role Separation & Dashboards
+Clear visual and functional separation between roles:
+
+#### Customer Experience:
+- **Navigation:** Home, Find Services, My Jobs, My Profile, Settings, Logout.
+- **Dashboard:**
+  - Personalized greeting with permanent Customer Kazi ID badge.
+  - KPI Cards: Active Jobs count, Jobs Awaiting Review count, Completed Jobs count.
+  - Quick action: "+ Find a Service".
+  - Awaiting Review Banner: Prompts customer to review completed jobs to enforce the accountability loop.
+  - Active Agreements cards with direct action to mark completed or view agreement records.
+- **Access Guard:** Customers cannot navigate to `#artisan-dashboard` or `#artisan-profile`.
+
+#### Artisan / Service Provider Experience:
+- **Navigation:** Home, Directory, Artisan Dashboard, My Jobs, Professional Profile, Settings, Logout.
+- **Dashboard:**
+  - Personalized greeting with permanent Artisan Kazi ID badge.
+  - Trade & city indicator (e.g. Electrician · Abuja).
+  - KPI Cards: Average customer star rating, verified reviews count, completed jobs count, active agreements, tracked agreed earnings.
+  - Active & Scheduled jobs list with client name, customer Kazi ID, date, locked agreed price, and status progression buttons (`Start Job`, `Mark Completed`).
+  - Recent verified customer feedback stream with accountability checklist indicators (punctuality, price integrity).
+- **Access Guard:** Artisans cannot navigate to `#customer-dashboard` or `#customer-profile`.
+
+### 26.4 Profile Management & Synchronization
+- **Customer Profile:**
+  - View & Edit: Full Name, Email, Phone, City, Delivery Address/Landmark, Preferred Contact Method.
+  - Permanent Kazi ID is displayed prominently in a locked state.
+  - Edits persist to `kazi_users` and automatically synchronize `customerName` across counterparty job records without creating duplicate records.
+- **Artisan Professional Profile:**
+  - Private Account Info: Full Name, Email, Phone, City (kept private from the public directory).
+  - Public Trade Info: Primary trade, services catalogue, service areas in Abuja, years of experience, typical price range (min/max ₦), availability status, professional bio.
+  - Edits update `kazi_users`, automatically synchronize `kazi_providers` catalog entries, and update `providerName` across counterparty job cards.
+
+### 26.5 Public vs. Private Information Boundaries
+- **Public Artisan Directory:** Displays trade credentials, verified review scores, completed job counts, years of experience, and permanent Kazi ID (`KZ-ART-XXXXXX`). Does NOT expose personal email or password.
+- **Customer Privacy:** Customers do not have a public marketplace profile and cannot be browsed by other users in any directory. Customer Kazi IDs (`KZ-CUS-XXXXXX`) are only displayed within their private account and mutual job agreement records.
+
+### 26.6 Non-Destructive Data Migration
+- On initialization, `KaziStorage.runMigration()` inspects existing browser LocalStorage:
+  1. Detects users or seed providers lacking a `kaziId`.
+  2. Generates permanent sequential IDs without overwriting existing jobs, notes, or reviews.
+  3. Ensures demo accounts (`customer@kazi.demo`, `artisan@kazi.demo`) exist with matching credentials.
+  4. Preserves all 24 Abuja seed artisans, existing jobs, and reviews intact.
+

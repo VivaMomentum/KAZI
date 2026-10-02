@@ -97,7 +97,10 @@ const KaziProviders = (function() {
               <h3 class="provider-name">${provider.name}</h3>
               ${verifiedBadge}
             </div>
-            <p class="provider-category-line">${provider.category} · ${provider.city}</p>
+            <div class="provider-meta-row">
+              <span class="provider-category-line">${provider.category} · ${provider.city}</span>
+              <span class="card-kazi-id-badge">${provider.kaziId || 'KZ-ART-000001'}</span>
+            </div>
           </div>
         </div>
 
@@ -207,6 +210,10 @@ const KaziProviders = (function() {
             </div>
             <h1 class="profile-full-name">${provider.name}</h1>
             <p class="profile-category-tag">${provider.category}</p>
+            <div class="profile-kazi-id-row">
+              <span class="badge-kazi-id badge-kazi-id-art"><span class="kazi-id-label">KAZI ID:</span> <strong>${provider.kaziId || 'KZ-ART-000001'}</strong></span>
+            </div>
+            <p class="profile-experience-line">💼 <strong>${provider.yearsOfExperience || 8} years</strong> experience in Abuja</p>
             <p class="profile-location-text">📍 ${provider.city}, Nigeria</p>
             <div class="profile-badges-wrap">
               ${verifiedBadge}
