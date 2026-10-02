@@ -2,6 +2,7 @@
 
 **Document Version:** 1.0.0 (MVP Prototype)  
 **Author:** Vivian Dike 
+
 **Target Market:** Abuja, Nigeria (Expanding Nationally Later)  
 **Stack Constraint:** Vanilla HTML5, Vanilla CSS3 (No CSS Variables), Vanilla ES6 JavaScript, LocalStorage  
 
