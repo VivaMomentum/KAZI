@@ -251,7 +251,9 @@ Every registered user on Kazi receives a permanent, unique Kazi ID:
 - Expansion to Lagos, Port Harcourt, Ibadan, and Kano.
 
 
-Future features includes but not limited to:
+---
+
+## 15.Future features includes but not limited to:
 In-app payments
 Escrow
 Commission processing
